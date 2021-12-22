@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
 
-function App() {
+const Header = ({ text }) => (
+  <h1>{text}</h1>
+)
+
+const Button = ({ text, handleClick }) => (
+  <button onClick={handleClick}>{text}</button>
+)
+
+const Statisticsline = ({ text, value }) => (
+  <div>{text} {value}</div>
+)
+
+const App = () => {
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const addFeedback = (value, setFunction) => () => {
+    setFunction(value+1)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header text="Give feedback" />
+      <Button text="good" handleClick={addFeedback(good, setGood)} />
+      <Button text="neutral" handleClick={addFeedback(neutral, setNeutral)} />
+      <Button text="bad" handleClick={addFeedback(bad, setBad)} />
+      <Header text="Statistics" />
+      <Statisticsline text="good" value={good} />
+      <Statisticsline text="neutral" value={neutral} />
+      <Statisticsline text="bad" value={bad} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
