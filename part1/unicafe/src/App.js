@@ -21,6 +21,21 @@ const App = () => {
     setFunction(value+1)
   }
 
+  const countAverage = () => {
+    const nOfFeedbacks = good + neutral + bad
+    console.log(nOfFeedbacks)
+    const sumOfScores = (1 * good) + (-1 * bad)
+    const average = sumOfScores / nOfFeedbacks
+    return average
+  }
+  
+  const countPositivePresentage = () => {
+    const nOfFeedbacks = good + neutral + bad
+    const positiveProportion = good / nOfFeedbacks
+    const positivePresentage = positiveProportion * 100
+    return positivePresentage
+  }
+
   return (
     <div>
       <Header text="Give feedback" />
@@ -31,6 +46,9 @@ const App = () => {
       <Statisticsline text="good" value={good} />
       <Statisticsline text="neutral" value={neutral} />
       <Statisticsline text="bad" value={bad} />
+      <Statisticsline text="all" value={good + neutral + bad} />
+      <Statisticsline text="average" value={countAverage()} />
+      <Statisticsline text="positive" value={countPositivePresentage() + " %"} /> 
     </div>
   )
 }
