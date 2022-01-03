@@ -8,7 +8,7 @@ const Button = ({ text, handleClick }) => (
   <button onClick={handleClick}>{text}</button>
 )
 
-const Statisticsline = ({ text, value }) => (
+const StatisticsLine = ({ text, value }) => (
   <div>{text} {value}</div>
 )
 
@@ -44,12 +44,12 @@ const Statistics = ({ good, neutral, bad}) => {
   } else {
     return (
       <div>
-        <Statisticsline text="good" value={good} />
-        <Statisticsline text="neutral" value={neutral} />
-        <Statisticsline text="bad" value={bad} />
-        <Statisticsline text="all" value={good + neutral + bad} />
-        <Statisticsline text="average" value={countAverage()} />
-        <Statisticsline text="positive" value={countPositivePresentage() + " %"} />
+        <StatisticsLine text="good" value={good} />
+        <StatisticsLine text="neutral" value={neutral} />
+        <StatisticsLine text="bad" value={bad} />
+        <StatisticsLine text="all" value={good + neutral + bad} />
+        <StatisticsLine text="average" value={countAverage()} />
+        <StatisticsLine text="positive" value={countPositivePresentage() + " %"} />
       </div>
     )
   }
