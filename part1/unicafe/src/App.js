@@ -37,16 +37,22 @@ const Statistics = ({ good, neutral, bad}) => {
     return positivePresentage
   }
 
-  return (
-    <div>
-      <Statisticsline text="good" value={good} />
-      <Statisticsline text="neutral" value={neutral} />
-      <Statisticsline text="bad" value={bad} />
-      <Statisticsline text="all" value={good + neutral + bad} />
-      <Statisticsline text="average" value={countAverage()} />
-      <Statisticsline text="positive" value={countPositivePresentage() + " %"} />
-    </div>
-  )
+  if (bad + neutral + good === 0) {
+    return (
+      <div>No feedback given</div>
+    )
+  } else {
+    return (
+      <div>
+        <Statisticsline text="good" value={good} />
+        <Statisticsline text="neutral" value={neutral} />
+        <Statisticsline text="bad" value={bad} />
+        <Statisticsline text="all" value={good + neutral + bad} />
+        <Statisticsline text="average" value={countAverage()} />
+        <Statisticsline text="positive" value={countPositivePresentage() + " %"} />
+      </div>
+    )
+  }
 }
 
 const App = () => {
