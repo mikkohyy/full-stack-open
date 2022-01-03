@@ -8,11 +8,10 @@ const Header = ({ text }) => {
 }
 
 const Total = ({ parts }) => {
-  let numberOfExercises = 0
 
-  for (let i = 0; i < parts.length; i++) {
-    numberOfExercises += parts[i].exercises
-  }
+  const numberOfExercises = parts.reduce(
+    (previous, current) => previous + current.exercises, 0
+  )
 
   return (
     <b>total of {numberOfExercises} exercises</b>
