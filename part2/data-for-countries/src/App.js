@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const Country = ({ name }) => {
+const Country = ({ country }) => {
+  const [showDetailedInfo, setShowDetailedInfo] = useState(false)
+
+  const detailedInfo = () => {
+    if (showDetailedInfo) {
+      return <CountryWithDetailedInfo country={country} />
+    }
+  }
+
   return(
     <div>
-      {name}
+      {country.name} <button onClick={() => setShowDetailedInfo(!showDetailedInfo)}>
+        {showDetailedInfo ? 'hide' : 'show'}
+      </button>
+      {detailedInfo()}
     </div>
   )
 }
@@ -20,7 +31,7 @@ const CountrySearch = ({ value, handler }) => {
 const ListOfCountries = ({ countries }) => {
   return(
     <div>
-      {countries.map(country => <Country key={country.alpha3Code} name={country.name} />)}
+      {countries.map(country => <Country key={country.alpha3Code} country={country} />)}
     </div>
   )
 }
@@ -46,7 +57,7 @@ const Flag = ({ linkToFlag }) => {
   )
 }
 
-const CountryWithExtraInformation = ({ country }) => {
+const CountryWithDetailedInfo = ({ country }) => {
   const { name, population, capital, languages, flag } = country
   return(
     <div>
@@ -59,12 +70,11 @@ const CountryWithExtraInformation = ({ country }) => {
   )
 }
 
-const Countries = ({ countries }) => {
-  
+const Countries = ({ countries }) => {  
   if (countries.length === 1) {
     const country = countries[0]
     return(
-      <CountryWithExtraInformation country={country} />
+      <CountryWithDetailedInfo country={country} />
     )
   } else if (countries.length <= 10) {
     return(
