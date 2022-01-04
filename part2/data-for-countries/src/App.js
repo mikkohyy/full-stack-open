@@ -36,6 +36,42 @@ const ListOfCountries = ({ countries }) => {
   )
 }
 
+const Weather = ({ city }) => {
+  const [temperature, setTemperature] = useState('')
+  const [weatherIcon, setWeatherIcon] = useState(false)
+  const [windSpeed, setWindSpeed] = useState('')
+  const [windDirection, setWindDirection] = useState('')
+
+  const apiKey = process.env.REACT_APP_API_KEY
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`
+
+  useEffect(() => {
+    axios
+      .get(url)
+      .then(response => {
+        const weatherInfo = response.data
+        setTemperature(weatherInfo.main.temp)
+        setWeatherIcon(weatherInfo.weather[0].icon)
+        setWindSpeed(weatherInfo.wind.speed)
+        setWindDirection(weatherInfo.wind.deg)
+      })
+  }, [url])
+
+  return(
+    <div>
+      <h3>Weather in {city}</h3>
+      <b>temperature: </b> {temperature} Celsius
+      <div>
+        {weatherIcon 
+          ? <img src={`http://openweathermap.org/img/wn/${weatherIcon}@2x.png`} alt="weather icon"/>
+          : false
+        }
+      </div>
+      <b>Wind: </b> {windSpeed} m/s direction (in degrees) {windDirection}
+    </div>
+  )
+}
+
 const Languages = ({ languages }) => {
   return(
     <div>
@@ -53,9 +89,11 @@ const Flag = ({ linkToFlag }) => {
     height: '10%'    
   }
   return(
-    <img style={flagStyle} src={linkToFlag} alt="Flag of the country" width="200" height="200" />
+    <img style={flagStyle} src={linkToFlag} alt="Flag of the country" />
   )
 }
+
+
 
 const CountryWithDetailedInfo = ({ country }) => {
   const { name, population, capital, languages, flag } = country
@@ -74,7 +112,10 @@ const Countries = ({ countries }) => {
   if (countries.length === 1) {
     const country = countries[0]
     return(
-      <CountryWithDetailedInfo country={country} />
+      <div>
+        <CountryWithDetailedInfo country={country} />
+        <Weather city={country.capital} />
+      </div>
     )
   } else if (countries.length <= 10) {
     return(
