@@ -1,5 +1,56 @@
 import React, { useState, useEffect } from 'react'
 
+const Header = ({ text, size }) => {
+  if (size === "h2") {
+    return(
+      <h2>{text}</h2>
+    )
+  } else if (size === "h3") {
+    return(
+      <h3>{text}</h3>
+    )
+  }
+}
+
+const InputField = ({ value, onChange }) => {
+  return (
+    <input value={value} onChange={onChange}/>
+  )
+}
+
+const AddPersonForm = ({ variablesAndFunctions }) => {
+  const { name, number, adding } = variablesAndFunctions
+
+  return (
+    <form>
+      <div>
+        name: <InputField value={name.variable} onChange={name.handleFunction} />
+      </div>
+      <div>
+        number: <InputField value={number.variable} onChange={number.handleFunction} />
+      </div>
+      <div>
+        <button type="submit" onClick={adding.addFunction}>add</button>
+      </div>
+    </form>
+  )
+}
+
+const Person = ({ person }) => {
+  const {name, number } = person
+  return (
+    <div>{name} {number}</div>
+  )
+}
+
+const FilteredPhonebook = ({ persons }) => {
+  return (
+    <div>
+      {persons.map(person => <Person key={person.name} person={person} />)}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -32,7 +83,7 @@ const App = () => {
     setFilteredPersons(filteredAfterChangeInSearchField)
   }, [persons, searchField])
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
 
     const nameAlreadyInPhonebook = persons.some((person) => person.name === newName)
@@ -50,24 +101,28 @@ const App = () => {
     }
   }
 
+  const addingVariablesAndFunctions = {
+    name: {
+      field: newName,
+      handleFunction: handleNameChange,
+    },
+    number: {
+      field: newNumber,
+      handleFunction: handleNumberChange,
+    },
+    adding: {
+      addFunction: addPerson 
+    }
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
-        filter shown with <input value={searchField} onChange={handleSearchFieldChange}/>
-      <h2>Add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit" onClick={addName}>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {filteredPersons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
+      <Header text="Phonebook" size="h2" />
+        filter shown with <InputField value={searchField} onChange={handleSearchFieldChange}/>
+      <Header text="Add a new" size="h3" />
+      <AddPersonForm variablesAndFunctions={addingVariablesAndFunctions} />
+      <Header text="Numbers" size="h3" />
+      <FilteredPhonebook persons={filteredPersons} />
     </div>
   )
 }
