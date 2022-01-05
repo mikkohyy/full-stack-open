@@ -115,12 +115,33 @@ const App = () => {
     setNewNumber('')
   }
 
+  const updatePerson = () => {
+    const personToBeUpdated = persons.find(person => person.name === newName)
+    const modifiedPerson = { ...personToBeUpdated, number: newNumber}
+    
+    personService
+      .update(modifiedPerson, modifiedPerson.id)
+      .then(updatedPerson => {
+        const updatedPersons = persons.map(
+          person => person.id !== updatedPerson.id ? person : updatedPerson
+        )
+        setPersons(updatedPersons)
+      })
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     const nameAlreadyInPhonebook = persons.some((person) => person.name === newName)
 
+    const printUpdateConfirmationMessage = (name) => {
+      return `${name} is already added to the phonebook, replace the old number with a new one?`
+    }
+
     if (nameAlreadyInPhonebook) {
-      window.alert(`${newName} is already added to phonebook`)
+      if (window.confirm(printUpdateConfirmationMessage(newName))) {
+        updatePerson()
+        resetInputFields(event)
+      }
     } else {
       const newPerson = {
         name: newName,
