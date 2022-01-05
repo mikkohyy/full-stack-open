@@ -104,8 +104,13 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(newPerson))
-      resetInputFields(event)
+
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          resetInputFields(event)
+        })
     }
   }
 
@@ -126,7 +131,7 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" size="h2" />
-        filter shown with <InputField value={searchField} onChange={handleSearchFieldChange} />
+      filter shown with <InputField value={searchField} onChange={handleSearchFieldChange} />
       <Header text="Add a new" size="h3" />
       <AddPersonForm variablesAndFunctions={formVariablesAndFunctions} />
       <Header text="Numbers" size="h3" />
