@@ -212,16 +212,26 @@ const App = () => {
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
-      const updatedPersons = persons.filter(person => person.id !== id)
-      setPersons(updatedPersons)
       personService.remove(id)
+        .then(response => {
+          const updatedPersons = persons.filter(person => person.id !== id)
+          setPersons(updatedPersons)
 
-      const notification = {
-        message: `Deleted ${name}`,
-        wasSuccessfulOperation: true
-      }
+          const notification = {
+            message: `Deleted ${name}`,
+            wasSuccessfulOperation: true
+          }
+          notifyUser(notification)    
+        })
+        .catch(error => {
+          const notification = {
+            message: `Information of ${name} has already been removed from server`,
+            wasSuccessfulOperation: false
+          }
+          notifyUser(notification)
 
-      notifyUser(notification)
+        })
+      
     }
   }
 
