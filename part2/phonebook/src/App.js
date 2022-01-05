@@ -40,14 +40,36 @@ const AddPersonForm = ({ variablesAndFunctions }) => {
 const Person = ({ person }) => {
   const {name, number } = person
   return (
-    <div>{name} {number}</div>
+    <>
+      {name} {number}
+    </>
   )
 }
 
-const FilteredPhonebook = ({ persons }) => {
+const Button = ({ onClick }) => {
+  return (
+    <button onClick={onClick}>delete</button> 
+  )
+}
+
+const PhonebookEntry = ({ person, handleRemove }) => {
+  const removePerson = () => {
+    return handleRemove(person.id, person.name)
+  }
+  
+  return(
+    <div>
+      <Person person={person} /> <Button onClick={removePerson} />
+    </div>
+  )
+}
+
+const FilteredPhonebook = ({ persons, handleRemove }) => {
   return (
     <div>
-      {persons.map(person => <Person key={person.name} person={person} />)}
+      {persons.map(person => 
+        <PhonebookEntry key={person.id} person={person} handleRemove={handleRemove} />
+      )}
     </div>
   )
 }
@@ -114,6 +136,14 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      const updatedPersons = persons.filter(person => person.id !== id)
+      setPersons(updatedPersons)
+      personService.remove(id)
+    }
+  }
+
   const formVariablesAndFunctions = {
     name: {
       field: newName,
@@ -135,7 +165,7 @@ const App = () => {
       <Header text="Add a new" size="h3" />
       <AddPersonForm variablesAndFunctions={formVariablesAndFunctions} />
       <Header text="Numbers" size="h3" />
-      <FilteredPhonebook persons={filteredPersons} />
+      <FilteredPhonebook persons={filteredPersons} handleRemove={deletePerson}/>
     </div>
   )
 }
