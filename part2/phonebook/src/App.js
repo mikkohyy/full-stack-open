@@ -224,6 +224,8 @@ const App = () => {
           notifyUser(notification)    
         })
         .catch(error => {
+          const updatedPersons = persons.filter(person => person.id !== id)
+          setPersons(updatedPersons)
           const notification = {
             message: `Information of ${name} has already been removed from server`,
             wasSuccessfulOperation: false
