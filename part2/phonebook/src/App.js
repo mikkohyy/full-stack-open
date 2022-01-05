@@ -14,17 +14,16 @@ const Header = ({ text, size }) => {
 }
 
 const InputField = ({ value, onChange }) => {
-
   return (
     <input value={value} onChange={onChange}/>
   )
 }
 
 const AddPersonForm = ({ variablesAndFunctions }) => {
-  const { name, number, adding } = variablesAndFunctions
+  const { name, number, adding } = variablesAndFunctions  
 
   return (
-    <form>
+    <form onSubmit={adding.addFunction}>
       <div>
         name: <InputField value={name.variable} onChange={name.handleFunction} />
       </div>
@@ -32,7 +31,7 @@ const AddPersonForm = ({ variablesAndFunctions }) => {
         number: <InputField value={number.variable} onChange={number.handleFunction} />
       </div>
       <div>
-        <button type="submit" onClick={adding.addFunction}>add</button>
+        <button type="submit">add</button>
       </div>
     </form>
   )
@@ -87,9 +86,15 @@ const App = () => {
     setFilteredPersons(filteredAfterChangeInSearchField)
   }, [persons, searchField])
 
+  const resetInputFields = (event) => {
+    const formElementsAsArray = Array.from(event.target)
+    formElementsAsArray.forEach((element) => element.value = "")
+    setNewName('')
+    setNewNumber('')
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
-
     const nameAlreadyInPhonebook = persons.some((person) => person.name === newName)
 
     if (nameAlreadyInPhonebook) {
@@ -100,10 +105,11 @@ const App = () => {
         number: newNumber
       }
       setPersons(persons.concat(newPerson))
+      resetInputFields(event)
     }
   }
 
-  const addingVariablesAndFunctions = {
+  const formVariablesAndFunctions = {
     name: {
       field: newName,
       handleFunction: handleNameChange,
@@ -120,9 +126,9 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" size="h2" />
-        filter shown with <InputField value={searchField} onChange={handleSearchFieldChange}/>
+        filter shown with <InputField value={searchField} onChange={handleSearchFieldChange} />
       <Header text="Add a new" size="h3" />
-      <AddPersonForm variablesAndFunctions={addingVariablesAndFunctions} />
+      <AddPersonForm variablesAndFunctions={formVariablesAndFunctions} />
       <Header text="Numbers" size="h3" />
       <FilteredPhonebook persons={filteredPersons} />
     </div>

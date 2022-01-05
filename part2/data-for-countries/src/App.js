@@ -93,8 +93,6 @@ const Flag = ({ linkToFlag }) => {
   )
 }
 
-
-
 const CountryWithDetailedInfo = ({ country }) => {
   const { name, population, capital, languages, flag } = country
   return(
