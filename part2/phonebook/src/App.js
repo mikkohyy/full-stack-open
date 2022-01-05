@@ -74,12 +74,38 @@ const FilteredPhonebook = ({ persons, handleRemove }) => {
   )
 }
 
+const Notification = ({ info }) => {
+  const { message, wasSuccessfulOperation } = info
+  if (message === null) {
+    return null
+  }
+
+  const notificationStyle = {
+    color: wasSuccessfulOperation ? 'green' : 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return(
+    <div style={notificationStyle}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchField, setSearchField] = useState('')
   const [filteredPersons, setFilteredPersons] = useState(persons)
+  const [notificationInfo, setNotificationInfo] = useState(
+    {message: null, wasSuccessfulOperation: null}
+  )
 
   useEffect(() => {
     personService
@@ -108,6 +134,19 @@ const App = () => {
     setFilteredPersons(filteredAfterChangeInSearchField)
   }, [persons, searchField])
 
+  const notifyUser = ({ message, wasSuccessfulOperation }) => {
+    const notification = {
+      message: message,
+      wasSuccessfulOperation: wasSuccessfulOperation
+    }
+
+    setNotificationInfo(notification)
+    setTimeout(() => {
+      setNotificationInfo({ message: null, wasSuccessfulOperation: null })
+    }, 5000)
+    
+  }
+
   const resetInputFields = (event) => {
     const formElementsAsArray = Array.from(event.target)
     formElementsAsArray.forEach((element) => element.value = "")
@@ -126,6 +165,13 @@ const App = () => {
           person => person.id !== updatedPerson.id ? person : updatedPerson
         )
         setPersons(updatedPersons)
+
+        const notification = {
+          message: `Updated ${updatedPerson.name}'s number!`,
+          wasSuccessfulOperation: true
+        }
+
+        notifyUser(notification)
       })
   }
 
@@ -153,6 +199,13 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           resetInputFields(event)
+
+          const newNotification = {
+            message: `Added ${newPerson.name}`,
+            wasSuccessfulOperation: true
+          }
+
+          notifyUser(newNotification)
         })
     }
   }
@@ -162,6 +215,13 @@ const App = () => {
       const updatedPersons = persons.filter(person => person.id !== id)
       setPersons(updatedPersons)
       personService.remove(id)
+
+      const notification = {
+        message: `Deleted ${name}`,
+        wasSuccessfulOperation: true
+      }
+
+      notifyUser(notification)
     }
   }
 
@@ -182,6 +242,7 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" size="h2" />
+      <Notification info={notificationInfo} />
       filter shown with <InputField value={searchField} onChange={handleSearchFieldChange} />
       <Header text="Add a new" size="h3" />
       <AddPersonForm variablesAndFunctions={formVariablesAndFunctions} />
