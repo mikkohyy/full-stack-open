@@ -1,101 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const Header = ({ text, size }) => {
-  if (size === "h2") {
-    return(
-      <h2>{text}</h2>
-    )
-  } else if (size === "h3") {
-    return(
-      <h3>{text}</h3>
-    )
-  }
-}
-
-const InputField = ({ value, onChange }) => {
-  return (
-    <input value={value} onChange={onChange}/>
-  )
-}
-
-const AddPersonForm = ({ variablesAndFunctions }) => {
-  const { name, number, adding } = variablesAndFunctions  
-
-  return (
-    <form onSubmit={adding.addFunction}>
-      <div>
-        name: <InputField value={name.variable} onChange={name.handleFunction} />
-      </div>
-      <div>
-        number: <InputField value={number.variable} onChange={number.handleFunction} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
-}
-
-const Person = ({ person }) => {
-  const {name, number } = person
-  return (
-    <>
-      {name} {number}
-    </>
-  )
-}
-
-const Button = ({ onClick }) => {
-  return (
-    <button onClick={onClick}>delete</button> 
-  )
-}
-
-const PhonebookEntry = ({ person, handleRemove }) => {
-  const removePerson = () => {
-    return handleRemove(person.id, person.name)
-  }
-  
-  return(
-    <div>
-      <Person person={person} /> <Button onClick={removePerson} />
-    </div>
-  )
-}
-
-const FilteredPhonebook = ({ persons, handleRemove }) => {
-  return (
-    <div>
-      {persons.map(person => 
-        <PhonebookEntry key={person.id} person={person} handleRemove={handleRemove} />
-      )}
-    </div>
-  )
-}
-
-const Notification = ({ info }) => {
-  const { message, wasSuccessfulOperation } = info
-  if (message === null) {
-    return null
-  }
-
-  const notificationStyle = {
-    color: wasSuccessfulOperation ? 'green' : 'red',
-    background: 'lightgrey',
-    fontSize: 20,
-    borderStyle: 'solid',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10
-  }
-
-  return(
-    <div style={notificationStyle}>
-      {message}
-    </div>
-  )
-}
+import AddPersonForm from './components/AddPersonForm'
+import FilteredPhonebook from './components/FilteredPhonebook'
+import Header from './components/Header'
+import InputField from './components/InputField'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
