@@ -83,6 +83,16 @@ const App = () => {
 
         notifyUser(notification)
       })
+      .catch(error => {
+        const notification = {
+          message: error.response.data,
+          wasSuccessfulOperation: false
+        }
+        
+        console.log(error)
+
+        notifyUser(notification)
+      })
   }
 
   const addPerson = (event) => {
@@ -117,6 +127,14 @@ const App = () => {
 
           notifyUser(newNotification)
         })
+        .catch(error => {
+          const notification = {
+            message: error.response.data,
+            wasSuccessfulOperation: false
+          }
+  
+          notifyUser(notification)  
+        })
     }
   }
 
@@ -141,7 +159,6 @@ const App = () => {
             wasSuccessfulOperation: false
           }
           notifyUser(notification)
-
         })
       
     }
