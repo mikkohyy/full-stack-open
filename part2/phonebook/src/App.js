@@ -85,7 +85,7 @@ const App = () => {
       })
       .catch(error => {
         const notification = {
-          message: 'error.response.data',
+          message: error.response.data.error,
           wasSuccessfulOperation: false
         }
         notifyUser(notification)
