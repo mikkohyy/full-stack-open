@@ -26,6 +26,14 @@ const listWithManyBlogs = [
     __v: 0
   },
   {
+    _id: '61dc78ce53d167a48734aaf7',
+    title: 'Better tooling wont fix your API',
+    author: 'Swizec Teller',
+    url: 'https://swizec.com/blog/better-tooling-wont-fix-your-api/',
+    likes: 12,
+    __v: 0
+  },
+  {
     _id: '5a422b891b54a676234d17fa',
     title: 'First class tests',
     author: 'Robert C. Martin',
@@ -82,6 +90,39 @@ describe('total likes', () => {
 
   test('of bigger list is calculated right', () => {
     const result = listHelper.totalLikes(listWithManyBlogs)
-    expect(result).toBe(36)
+    expect(result).toBe(48)
+  })
+})
+
+describe('favourite blog', () => {
+  test('returns empty object when no blogs', () => {
+    const result = listHelper.favouriteBlog([])
+
+    expect(result).toEqual({})
+  })
+
+  test('returns the right blog when only one blog', () => {
+    const expectedResult = {
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    }
+
+    const result = listHelper.favouriteBlog(listWithOneBlog)
+
+    expect(result).toEqual(expectedResult)
+
+  })
+
+  test('return the right blog when many blogs', () => {
+    const expectedResult = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      likes: 12
+    }
+
+    const result = listHelper.favouriteBlog(listWithManyBlogs)
+
+    expect(result).toEqual(expectedResult)
   })
 })
