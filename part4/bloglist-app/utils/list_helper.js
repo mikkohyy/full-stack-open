@@ -44,6 +44,27 @@ const mostBlogs = (blogs) => {
   return authorWithMostBlogs || {}
 }
 
+const mostLikes = (blogs) => {
+  const likesSummary = _.reduce(blogs, (authorLikes, blog) => {
+    authorLikes[blog.author] = (authorLikes[blog.author] || 0) + blog.likes
+    return authorLikes
+  }, {})
+
+  let authorsWithLikes = []
+
+  _.forIn(likesSummary, (value, key) => {
+    const authorInfo = {
+      author: key,
+      likes: value
+    }
+    authorsWithLikes.push(authorInfo)
+  })
+
+  const authorWithMostLikes = _.maxBy(authorsWithLikes, 'likes')
+
+  return authorWithMostLikes || {}
+}
+
 const totalLikes = (blogs) => {
   const totalLikes = blogs.reduce((sumOfLikes, blog) => {
     return sumOfLikes + blog.likes
@@ -55,5 +76,6 @@ module.exports =  {
   dummy,
   favouriteBlog,
   mostBlogs,
+  mostLikes,
   totalLikes
 }

@@ -59,7 +59,7 @@ const listWithManyBlogs = [
     title: 'How GraphQL blows REST out of water',
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/how-graphql-blows-rest-out-of-the-water/',
-    likes: 0,
+    likes: 3,
     __v: 0
   },
   {
@@ -75,7 +75,7 @@ const listWithManyBlogs = [
     title: 'The quickest way to fail a tech interview',
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/the-quickest-way-to-fail-a-tech-interview/',
-    likes: 0,
+    likes: 2,
     __v: 0
   },
 
@@ -109,7 +109,7 @@ describe('total likes', () => {
 
   test('of bigger list is calculated right', () => {
     const result = listHelper.totalLikes(listWithManyBlogs)
-    expect(result).toBe(48)
+    expect(result).toBe(53)
   })
 })
 
@@ -132,48 +132,80 @@ describe('favourite blog', () => {
     expect(result).toEqual(expectedResult)
 
   })
+})
 
-  test('return the right blog when many blogs', () => {
-    const expectedResult = {
-      title: 'Canonical string reduction',
-      author: 'Edsger W. Dijkstra',
-      likes: 12
-    }
+test('return the right blog when many blogs', () => {
+  const expectedResult = {
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
+    likes: 12
+  }
 
-    const result = listHelper.favouriteBlog(listWithManyBlogs)
+  const result = listHelper.favouriteBlog(listWithManyBlogs)
+
+  expect(result).toEqual(expectedResult)
+})
+
+describe('author with most blogs', () => {
+  test('return empty object when no blogs', () => {
+    const expectedResult = {}
+
+    const result = listHelper.mostBlogs(listWithNoBlogs)
 
     expect(result).toEqual(expectedResult)
   })
 
-  describe('most blogs', () => {
-    test('return empty object when no blogs', () => {
-      const expectedResult = {}
+  test('return right author when one blog', () => {
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    }
 
-      const result = listHelper.mostBlogs(listWithNoBlogs)
+    const result = listHelper.mostBlogs(listWithOneBlog)
 
-      expect(result).toEqual(expectedResult)
-    })
+    expect(result).toEqual(expectedResult)
+  })
 
-    test('return right answer when one blog', () => {
-      const expectedResult = {
-        author: 'Edsger W. Dijkstra',
-        blogs: 1
-      }
+  test('return right author when many blogs', () => {
+    const expectedResult = {
+      author: 'Swizec Teller',
+      blogs: 3
+    }
 
-      const result = listHelper.mostBlogs(listWithOneBlog)
+    const result = listHelper.mostBlogs(listWithManyBlogs)
 
-      expect(result).toEqual(expectedResult)
-    })
+    expect(result).toEqual(expectedResult)
+  })
+})
 
-    test('return right answer when many blogs', () => {
-      const expectedResult = {
-        author: 'Swizec Teller',
-        blogs: 3
-      }
+describe('author with most likes', () => {
+  test('return empty object when empty list of blogs', () => {
+    const expectedResult = {}
 
-      const result = listHelper.mostBlogs(listWithManyBlogs)
+    const result = listHelper.mostLikes(listWithNoBlogs)
 
-      expect(result).toEqual(expectedResult)
-    })
+    expect(result).toEqual(expectedResult)
+  })
+
+  test('return right author with one blog', () => {
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    }
+
+    const result = listHelper.mostLikes(listWithOneBlog)
+
+    expect(result).toEqual(expectedResult)
+  })
+
+  test('return right author when many blogs', () => {
+    const expectedResult = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
+
+    const result = listHelper.mostLikes(listWithManyBlogs)
+
+    expect(result).toEqual(expectedResult)
   })
 })
