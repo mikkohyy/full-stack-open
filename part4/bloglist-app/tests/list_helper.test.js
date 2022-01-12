@@ -78,7 +78,6 @@ const listWithManyBlogs = [
     likes: 2,
     __v: 0
   },
-
   {
     _id: '5a422bc61b54a676234d17fc',
     title: 'Type wars',
