@@ -16,11 +16,32 @@ afterAll(() => {
 
 describe('GET /api/blogs request tests', () => {
   test('all blogs are returned', async () => {
-    helper.addMultipleBlogs()
+    await helper.addMultipleBlogs()
     const response = await api.get('/api/blogs')
     const returnedBlogs = response.body
 
     expect(returnedBlogs).toHaveLength(helper.listWithManyBlogs.length)
+  })
+})
+
+describe('DELETE /api/blogs request tests', () => {
+  test('individual blog is deleted', async () => {
+    await helper.addMultipleBlogs()
+
+    const blogsInDbBeforeDelete = await helper.getBlogsInDb()
+    const blogToBeDeleted = _.first(blogsInDbBeforeDelete)
+
+    await api
+      .delete(`/api/blogs/${blogToBeDeleted.id}`)
+      .expect(204)
+
+    const blogsInDbAfterDelete = await helper.getBlogsInDb()
+    const blogsInDbAfterDeleteAsString = JSON.stringify(blogsInDbAfterDelete)
+
+    expect(blogsInDbAfterDelete).toHaveLength(blogsInDbBeforeDelete.length - 1)
+    expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.url)
+    expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.title)
+
   })
 })
 
