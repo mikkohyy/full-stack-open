@@ -8,10 +8,10 @@ const addMultipleBlogs = async () => {
 }
 
 const individualBlog = {
-  title: 'React patterns',
-  author: 'Michael Chan',
-  url: 'https://reactpatterns.com/',
-  likes: 7
+  title: 'Rules for Being a Green Software Engineer',
+  author: 'Hamid Shojaee',
+  url: 'https://www.axosoft.com/dev-blog/rules-for-being-a-green-software-engineer',
+  likes: 2
 }
 
 const listWithManyBlogs = [
@@ -75,7 +75,7 @@ const listWithManyBlogs = [
   }
 ]
 
-const blogsInDb = async () => {
+const getBlogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
@@ -83,6 +83,6 @@ const blogsInDb = async () => {
 module.exports = {
   addMultipleBlogs,
   listWithManyBlogs,
-  blogsInDb,
+  getBlogsInDb,
   individualBlog
 }

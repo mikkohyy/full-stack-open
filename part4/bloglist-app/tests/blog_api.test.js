@@ -4,6 +4,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const _ = require('lodash')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -13,20 +14,31 @@ afterAll(() => {
   mongoose.connection.close()
 })
 
-test('all blogs are returned', async () => {
-  helper.addMultipleBlogs()
-  const response = await api.get('/api/blogs')
-  const returnedBlogs = response.body
+describe('GET /api/blogs request tests', () => {
+  test('all blogs are returned', async () => {
+    helper.addMultipleBlogs()
+    const response = await api.get('/api/blogs')
+    const returnedBlogs = response.body
 
-  expect(returnedBlogs).toHaveLength(helper.listWithManyBlogs.length)
+    expect(returnedBlogs).toHaveLength(helper.listWithManyBlogs.length)
+  })
 })
 
-test('a returned blog object has property id', async () => {
-  const blogObject = new Blog(helper.individualBlog)
-  const savedBlog = await blogObject.save()
+describe('POST /api/blogs request tests', () => {
+  test('a new blog is created', async () => {
+    helper.addMultipleBlogs()
 
-  const savedBlogString = JSON.stringify(savedBlog)
-  const blogStringAsJSON = JSON.parse(savedBlogString)
+  })
+})
 
-  expect(blogStringAsJSON.id).toBeDefined()
+describe('Blog object tests', () => {
+  test('a returned blog object has property id', async () => {
+    const blogObject = new Blog(helper.individualBlog)
+    await blogObject.save()
+
+    const blogs = await helper.getBlogsInDb()
+    const addedBlog = _.first(blogs)
+
+    expect(addedBlog.id).toBeDefined()
+  })
 })
