@@ -26,8 +26,21 @@ describe('GET /api/blogs request tests', () => {
 
 describe('POST /api/blogs request tests', () => {
   test('a new blog is created', async () => {
-    helper.addMultipleBlogs()
+    await helper.addMultipleBlogs()
 
+    const blogsInDbBeforePostRequest = await helper.getBlogsInDb()
+
+    await api
+      .post('/api/blogs')
+      .send(helper.individualBlog)
+
+    const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
+    const blogsInDbAfterPostRequestString = JSON.stringify(blogsInDbAfterPostRequest)
+
+    expect(blogsInDbAfterPostRequest).toHaveLength(blogsInDbBeforePostRequest.length+1)
+    expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.author)
+    expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.title)
+    expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.url)
   })
 })
 
