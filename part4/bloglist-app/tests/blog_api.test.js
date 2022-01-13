@@ -44,6 +44,8 @@ describe('POST /api/blogs request tests', () => {
   })
 
   test('if title and url are missing, responds with 400 Bad Request', async() => {
+    await helper.addMultipleBlogs()
+
     const blogObjectWithoutTitleAndUrl = {
       author: helper.individualBlog.author,
       likes: 23
@@ -53,6 +55,10 @@ describe('POST /api/blogs request tests', () => {
       .post('/api/blogs')
       .send(blogObjectWithoutTitleAndUrl)
       .expect(400)
+
+    const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
+
+    expect(blogsInDbAfterPostRequest).toHaveLength(helper.listWithManyBlogs.length)
   })
 })
 
