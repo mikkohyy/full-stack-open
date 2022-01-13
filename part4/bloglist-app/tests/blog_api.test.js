@@ -54,4 +54,23 @@ describe('Blog object tests', () => {
 
     expect(addedBlog.id).toBeDefined()
   })
+
+  test('when likes property is missing it will be defaulted to 0', async () => {
+    const blogObjectWithoutLikes = {
+      title: helper.individualBlog.title,
+      author: helper.individualBlog.author,
+      url: helper.individualBlog.url
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogObjectWithoutLikes)
+
+    const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
+
+    const addedBlog = _.first(blogsInDbAfterPostRequest)
+
+    expect(addedBlog.likes).toBeDefined()
+    expect(addedBlog.likes).toBe(0)
+  })
 })
