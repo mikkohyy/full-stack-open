@@ -46,28 +46,24 @@ const listWithManyBlogs = [
     likes: 10
   },
   {
-    _id: '61dc844a82be32a99cabcaeb',
     title: 'How GraphQL blows REST out of water',
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/how-graphql-blows-rest-out-of-the-water/',
     likes: 3
   },
   {
-    _id: '5a422ba71b54a676234d17fb',
     title: 'TDD harms architecture',
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0
   },
   {
-    _id: '61ddd8972d4d44dfc2b13bc4',
     title: 'The quickest way to fail a tech interview',
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/the-quickest-way-to-fail-a-tech-interview/',
     likes: 2
   },
   {
-    _id: '5a422bc61b54a676234d17fc',
     title: 'Type wars',
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',

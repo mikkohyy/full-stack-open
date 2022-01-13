@@ -83,6 +83,46 @@ describe('POST /api/blogs request tests', () => {
   })
 })
 
+describe('PUT api/blogs request tests', () => {
+  test('likes of a blog can be updated', async () => {
+    await helper.addMultipleBlogs()
+
+    const blogsInDbBeforeUpdateRequest = await helper.getBlogsInDb()
+
+    const blogToBeUpdated = await _.first(blogsInDbBeforeUpdateRequest)
+
+    const updatedBlog = { ...blogToBeUpdated, likes: blogToBeUpdated.likes+1 }
+
+    await api
+      .put(`/api/blogs/${updatedBlog.id}`)
+      .send(updatedBlog)
+
+    const blogsInDbAfterUpdateRequest = await helper.getBlogsInDb()
+    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(blog => blog.id === updatedBlog.id)
+
+    expect(updatedBlogInDatabase.likes).toBe(blogToBeUpdated.likes+1)
+  })
+
+  test('author of a blog can be modified', async () => {
+    await helper.addMultipleBlogs()
+
+    const blogsInDbBeforeUpdateRequest = await helper.getBlogsInDb()
+    const blogToBeUpdated = await _.first(blogsInDbBeforeUpdateRequest)
+
+    const updatedBlog = { ...blogToBeUpdated, author: 'Modified Author' }
+
+    await api
+      .put(`/api/blogs/${updatedBlog.id}`)
+      .send(updatedBlog)
+
+    const blogsInDbAfterUpdateRequest = await helper.getBlogsInDb()
+    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(blog => blog.id === updatedBlog.id)
+
+    expect(updatedBlogInDatabase.author).not.toBe(blogToBeUpdated.author)
+    expect(updatedBlogInDatabase.author).toBe('Modified Author')
+  })
+})
+
 describe('Blog object tests', () => {
   test('a returned blog object has property id', async () => {
     const blogObject = new Blog(helper.individualBlog)
