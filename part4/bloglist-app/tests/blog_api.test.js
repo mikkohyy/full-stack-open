@@ -7,12 +7,6 @@ const Blog = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-
-  const blogObjects = helper.listWithManyBlogs
-    .map(blog => new Blog(blog))
-
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
 })
 
 afterAll(() => {
@@ -20,8 +14,19 @@ afterAll(() => {
 })
 
 test('all blogs are returned', async () => {
+  helper.addMultipleBlogs()
   const response = await api.get('/api/blogs')
   const returnedBlogs = response.body
 
   expect(returnedBlogs).toHaveLength(helper.listWithManyBlogs.length)
+})
+
+test('a returned blog object has property id', async () => {
+  const blogObject = new Blog(helper.individualBlog)
+  const savedBlog = await blogObject.save()
+
+  const savedBlogString = JSON.stringify(savedBlog)
+  const blogStringAsJSON = JSON.parse(savedBlogString)
+
+  expect(blogStringAsJSON.id).toBeDefined()
 })

@@ -1,5 +1,19 @@
 const Blog = require('../models/blog')
 
+const addMultipleBlogs = async () => {
+  const blogObjects = listWithManyBlogs.map(blog => new Blog(blog))
+
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
+}
+
+const individualBlog = {
+  title: 'React patterns',
+  author: 'Michael Chan',
+  url: 'https://reactpatterns.com/',
+  likes: 7
+}
+
 const listWithManyBlogs = [
   {
     title: 'React patterns',
@@ -67,6 +81,8 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
+  addMultipleBlogs,
   listWithManyBlogs,
-  blogsInDb
+  blogsInDb,
+  individualBlog
 }
