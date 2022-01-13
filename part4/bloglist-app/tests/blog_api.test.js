@@ -42,6 +42,18 @@ describe('POST /api/blogs request tests', () => {
     expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.title)
     expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.url)
   })
+
+  test('if title and url are missing, responds with 400 Bad Request', async() => {
+    const blogObjectWithoutTitleAndUrl = {
+      author: helper.individualBlog.author,
+      likes: 23
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogObjectWithoutTitleAndUrl)
+      .expect(400)
+  })
 })
 
 describe('Blog object tests', () => {
