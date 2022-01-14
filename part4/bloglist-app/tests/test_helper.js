@@ -1,4 +1,5 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const addMultipleBlogs = async () => {
   const blogObjects = listWithManyBlogs.map(blog => new Blog(blog))
@@ -7,11 +8,27 @@ const addMultipleBlogs = async () => {
   await Promise.all(promiseArray)
 }
 
+const getBlogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
+const getUsersInDb = async () => {
+  const users = await User.find({})
+  return users.map(user => user.toJSON())
+}
+
 const individualBlog = {
   title: 'Rules for Being a Green Software Engineer',
   author: 'Hamid Shojaee',
   url: 'https://www.axosoft.com/dev-blog/rules-for-being-a-green-software-engineer',
   likes: 2
+}
+
+const individualUser = {
+  username: 'zerocool',
+  name: 'Dade Murphy',
+  password: 'loocorez'
 }
 
 const listWithManyBlogs = [
@@ -71,14 +88,11 @@ const listWithManyBlogs = [
   }
 ]
 
-const getBlogsInDb = async () => {
-  const blogs = await Blog.find({})
-  return blogs.map(blog => blog.toJSON())
-}
-
 module.exports = {
   addMultipleBlogs,
-  listWithManyBlogs,
   getBlogsInDb,
-  individualBlog
+  getUsersInDb,
+  individualBlog,
+  individualUser,
+  listWithManyBlogs
 }
