@@ -22,6 +22,19 @@ describe('GET /api/blogs request tests', () => {
 
     expect(returnedBlogs).toHaveLength(helper.listWithManyBlogs.length)
   })
+
+  test('returned blogs have user info in them', async () => {
+    const addedUser = await helper.addIndividualUser()
+    await helper.addThreeBlogsWithUserId(addedUser._id)
+
+    const response = await api.get('/api/blogs')
+    const returnedBlogs = response.body
+
+    const firstBlog = _.first(returnedBlogs)
+
+    expect(firstBlog.user).toBeDefined()
+    expect(firstBlog.user.id).toBe(addedUser._id.toString())
+  })
 })
 
 describe('DELETE /api/blogs request tests', () => {
@@ -80,6 +93,20 @@ describe('POST /api/blogs request tests', () => {
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
 
     expect(blogsInDbAfterPostRequest).toHaveLength(helper.listWithManyBlogs.length)
+  })
+
+  test('created blog has user property', async () => {
+    await helper.addMultipleUsers()
+
+    const response = await api
+      .post('/api/blogs')
+      .send(helper.individualBlog)
+      .expect(201)
+
+    const returnedBlog = response.body
+
+    expect(returnedBlog.user).toBeDefined()
+
   })
 })
 

@@ -4,7 +4,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-// const _ = require('lodash')
+const _ = require('lodash')
 
 beforeEach(async () => {
   await User.deleteMany({})
@@ -12,6 +12,28 @@ beforeEach(async () => {
 
 afterAll(() => {
   mongoose.connection.close()
+})
+
+describe('GET /api/users request tests', () => {
+  test('user has list of their blogs', async() => {
+    const addedUser = await helper.addIndividualUser()
+    const addedBlogs = await helper.addThreeBlogsWithUserId(addedUser._id)
+
+    const blogIds = addedBlogs.map(blog => blog.id)
+
+    addedUser.blogs = blogIds
+
+    await addedUser.save()
+
+    const response = await api.get('/api/users')
+    const returnedUsers = response.body
+    const firstUser = _.first(returnedUsers)
+
+    const blogsInDb = await helper.getBlogsInDb()
+
+    expect(firstUser.blogs).toBeDefined()
+    expect(firstUser.blogs).toHaveLength(blogsInDb.length)
+  })
 })
 
 describe('POST /api/users request tests', () => {
