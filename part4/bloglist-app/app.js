@@ -24,6 +24,7 @@ morgan.token('request-body', (req) => JSON.stringify(req.body))
 app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :response-time ms :res[content-length] :request-body'))
+app.use(middleware.tokenExtractor)
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
