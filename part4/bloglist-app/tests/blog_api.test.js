@@ -98,10 +98,14 @@ describe('POST /api/blogs request tests', () => {
   test('created blog has user property', async () => {
     await helper.addMultipleUsers()
 
+    const users = await helper.getUsersInDb()
+
+    const user = _.first(users)
+
     const response = await api
       .post('/api/blogs')
-      .send(helper.individualBlog)
-      .expect(201)
+      .send({ ...helper.individualBlog, userId: user.id })
+      .expect (201)
 
     const returnedBlog = response.body
 

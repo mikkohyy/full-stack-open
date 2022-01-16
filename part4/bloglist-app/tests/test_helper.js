@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 const addThreeBlogsWithUserId = async (userId) => {
   await Blog.deleteMany({})
@@ -46,10 +47,13 @@ const addMultipleBlogs = async () => {
 const addIndividualUser = async () => {
   await User.deleteMany({})
 
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash('loocorez', saltRounds)
+
   const newUser = {
     username: 'zerocool',
     name: 'Dade Murphy',
-    passwordHash: 'loocorez',
+    passwordHash: passwordHash,
     blogs: []
   }
 

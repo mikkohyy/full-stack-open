@@ -6,6 +6,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
+const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
@@ -26,6 +27,7 @@ app.use(morgan(':method :url :status :response-time ms :res[content-length] :req
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 app.use(middleware.errorHandler)
 
