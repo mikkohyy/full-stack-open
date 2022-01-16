@@ -159,16 +159,14 @@ describe('POST /api/blogs request tests', () => {
   })
 
   test('created blog has user property', async () => {
-    await helper.addMultipleUsers()
+    const loggedInUser = await helper.createUserAndEstablishItLoggedIn()
 
-    const users = await helper.getUsersInDb()
-
-    const user = _.first(users)
+    await helper.addMultipleBlogs()
 
     const response = await api
       .post('/api/blogs')
-      .send({ ...helper.individualBlog, userId: user.id })
-      .expect(201)
+      .set('Authorization', `bearer ${loggedInUser.token}`)
+      .send(helper.individualBlog)
 
     const returnedBlog = response.body
 
@@ -235,8 +233,11 @@ describe('Blog object tests', () => {
       url: helper.individualBlog.url
     }
 
+    const loggedInUser = await helper.createUserAndEstablishItLoggedIn()
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${loggedInUser.token}`)
       .send(blogObjectWithoutLikes)
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
