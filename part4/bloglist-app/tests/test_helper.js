@@ -1,6 +1,7 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const addThreeBlogsWithUserId = async (userId) => {
   await Blog.deleteMany({})
@@ -70,6 +71,33 @@ const addMultipleUsers = async() => {
 
   const promiseArray = userObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
+}
+
+const createUserAndEstablishItLoggedIn = async() => {
+  await User.deleteMany({})
+
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash('loocorez', saltRounds)
+
+  const newUser = {
+    username: 'zerocool',
+    name: 'Dade Murphy',
+    passwordHash: passwordHash,
+    blogs: []
+  }
+
+  const userObject = new User(newUser)
+  const returnedUser = await userObject.save()
+
+  const userForToken = {
+    username: returnedUser.username,
+    id: returnedUser._id
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET)
+  const loggedInUser = { ...userForToken, token }
+
+  return loggedInUser
 }
 
 const getBlogsInDb = async () => {
@@ -181,6 +209,7 @@ module.exports = {
   addIndividualUser,
   addMultipleUsers,
   addThreeBlogsWithUserId,
+  createUserAndEstablishItLoggedIn,
   getBlogsInDb,
   getUsersInDb,
   individualBlog,

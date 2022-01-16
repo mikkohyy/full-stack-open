@@ -1,6 +1,15 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 blogsRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id)
@@ -21,21 +30,28 @@ blogsRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: 'body or url missing' })
   }
 
-  const user = await User.findById(body.userId)
+  const token = getTokenFrom(request)
+  const decodedToken = token ? jwt.verify(token, process.env.SECRET) : 'none'
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
 
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
+    user: user._id,
     likes: body.likes || 0,
-    user: body.userId
   })
 
   const savedBlog = await blog.save()
-
   user.blogs = user.blogs.concat(savedBlog._id)
 
-  await User.findOneAndUpdate(user._id, user, { new: true })
+  console.log(user)
+
+  await user.save()
 
   response.status(201).json(savedBlog)
 })

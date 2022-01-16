@@ -60,12 +60,15 @@ describe('DELETE /api/blogs request tests', () => {
 
 describe('POST /api/blogs request tests', () => {
   test('a new blog is created', async () => {
+    const loggedInUser = await helper.createUserAndEstablishItLoggedIn()
+
     await helper.addMultipleBlogs()
 
     const blogsInDbBeforePostRequest = await helper.getBlogsInDb()
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${loggedInUser.token}`)
       .send(helper.individualBlog)
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
@@ -77,7 +80,24 @@ describe('POST /api/blogs request tests', () => {
     expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.url)
   })
 
-  test('if title and url are missing, responds with 400 Bad Request', async() => {
+  test('a new blog is not created when user is not logged in and 401 is returned', async () => {
+    await helper.addMultipleBlogs()
+
+    const blogsInDbBeforePostRequest = await helper.getBlogsInDb()
+
+    const response = await api
+      .post('/api/blogs')
+      .send(helper.individualBlog)
+      .expect(401)
+
+    const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
+
+    expect(blogsInDbAfterPostRequest).toHaveLength(blogsInDbBeforePostRequest.length)
+    expect(response.body).toHaveProperty('error')
+    expect(response.body.error).toContain('token missing or invalid')
+  })
+
+  test('if title and url are missing, responds with 401 Invalid request', async() => {
     await helper.addMultipleBlogs()
 
     const blogObjectWithoutTitleAndUrl = {
@@ -88,7 +108,7 @@ describe('POST /api/blogs request tests', () => {
     await api
       .post('/api/blogs')
       .send(blogObjectWithoutTitleAndUrl)
-      .expect(400)
+      .expect(401)
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
 
@@ -105,7 +125,7 @@ describe('POST /api/blogs request tests', () => {
     const response = await api
       .post('/api/blogs')
       .send({ ...helper.individualBlog, userId: user.id })
-      .expect (201)
+      .expect(201)
 
     const returnedBlog = response.body
 
