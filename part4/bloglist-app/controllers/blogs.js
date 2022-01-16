@@ -4,7 +4,26 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 blogsRouter.delete('/:id', async (request, response) => {
+  const decodedToken = request.token ? jwt.verify(request.token, process.env.SECRET) : 'none'
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const blogToBeDeleted = await Blog.findById(request.params.id)
+
+  if (blogToBeDeleted.user.toString() !== decodedToken.id) {
+    return response.status(401).json({ error: 'blog not created by user' })
+  }
+
   await Blog.findByIdAndRemove(request.params.id)
+
+  const userWhoAdded = await User.findById(decodedToken.id)
+
+  userWhoAdded.blogs = userWhoAdded.blogs.filter(blog => blog.toString() !== request.params.id)
+
+  await userWhoAdded.save()
+
   response.status(204).end()
 })
 

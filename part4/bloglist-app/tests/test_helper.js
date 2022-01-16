@@ -64,6 +64,25 @@ const addIndividualUser = async () => {
   return returnedUser
 }
 
+const addAcidburnUser = async () => {
+  await User.deleteMany({})
+
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash('nrubdica', saltRounds)
+
+  const newUser = {
+    username: 'acidburn',
+    name: 'Kate Libby',
+    passwordHash: passwordHash,
+    blogs: []
+  }
+
+  const userObject = new User(newUser)
+  const returnedUser = await userObject.save()
+
+  return returnedUser
+}
+
 const addMultipleUsers = async() => {
   await User.deleteMany({})
 
@@ -82,6 +101,31 @@ const createUserAndEstablishItLoggedIn = async() => {
   const newUser = {
     username: 'zerocool',
     name: 'Dade Murphy',
+    passwordHash: passwordHash,
+    blogs: []
+  }
+
+  const userObject = new User(newUser)
+  const returnedUser = await userObject.save()
+
+  const userForToken = {
+    username: returnedUser.username,
+    id: returnedUser._id
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET)
+  const loggedInUser = { ...userForToken, token }
+
+  return loggedInUser
+}
+
+const createAnotherUserAndEstablishItLoggedIn = async() => {
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash('nrubdica', saltRounds)
+
+  const newUser = {
+    username: 'acidburn',
+    name: 'Kate Libby',
     passwordHash: passwordHash,
     blogs: []
   }
@@ -205,11 +249,13 @@ const listWithManyUsers = [
 
 
 module.exports = {
+  addAcidburnUser,
   addMultipleBlogs,
   addIndividualUser,
   addMultipleUsers,
   addThreeBlogsWithUserId,
   createUserAndEstablishItLoggedIn,
+  createAnotherUserAndEstablishItLoggedIn,
   getBlogsInDb,
   getUsersInDb,
   individualBlog,

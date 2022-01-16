@@ -4,6 +4,7 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const _ = require('lodash')
 
 beforeEach(async () => {
@@ -38,23 +39,65 @@ describe('GET /api/blogs request tests', () => {
 })
 
 describe('DELETE /api/blogs request tests', () => {
-  test('individual blog is deleted', async () => {
-    await helper.addMultipleBlogs()
+  test('individual blog can be deleted by user who added it', async () => {
+    const userZerocool = await helper.createUserAndEstablishItLoggedIn()
+
+    await helper.addThreeBlogsWithUserId(userZerocool.id)
 
     const blogsInDbBeforeDelete = await helper.getBlogsInDb()
     const blogToBeDeleted = _.first(blogsInDbBeforeDelete)
 
+    userZerocool.blogs = blogsInDbBeforeDelete.map(blog => blog.id)
+
+    await User.findByIdAndUpdate(userZerocool.id, userZerocool, { new: true })
+
+    const userBeforeDelete = await User.findById(userZerocool.id)
+
     await api
       .delete(`/api/blogs/${blogToBeDeleted.id}`)
+      .set('Authorization', `bearer ${userZerocool.token}`)
       .expect(204)
 
     const blogsInDbAfterDelete = await helper.getBlogsInDb()
     const blogsInDbAfterDeleteAsString = JSON.stringify(blogsInDbAfterDelete)
 
+    const userAfterDelete = await User.findById(userZerocool.id)
+
     expect(blogsInDbAfterDelete).toHaveLength(blogsInDbBeforeDelete.length - 1)
     expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.url)
     expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.title)
+    expect(userAfterDelete.blogs).toHaveLength(userBeforeDelete.blogs.length-1)
+  })
 
+  test('user who did not add the blog cannot delete it', async () => {
+    const userZerocool = await helper.createUserAndEstablishItLoggedIn()
+    const userAcidburn = await helper.createAnotherUserAndEstablishItLoggedIn()
+
+    await helper.addThreeBlogsWithUserId(userZerocool.id)
+
+    const blogsInDbBeforeDelete = await helper.getBlogsInDb()
+    const blogToBeDeleted = _.first(blogsInDbBeforeDelete)
+
+    userZerocool.blogs = blogsInDbBeforeDelete.map(blog => blog.id)
+
+    await User.findByIdAndUpdate(userZerocool.id, userZerocool, { new: true })
+
+    const userBeforeDelete = await User.findById(userZerocool.id)
+
+    await api
+      .delete(`/api/blogs/${blogToBeDeleted.id}`)
+      .set('Authorization', `bearer ${userAcidburn.token}`)
+      .expect(401)
+
+    const userAfterDelete = await User.findById(userZerocool.id)
+
+    const blogsInDbAfterDelete = await helper.getBlogsInDb()
+    const blogsInDbAfterDeleteAsString = JSON.stringify(blogsInDbAfterDelete)
+
+    expect(blogsInDbAfterDelete).toHaveLength(blogsInDbBeforeDelete.length)
+    expect(blogsInDbAfterDeleteAsString).toContain(blogToBeDeleted.url)
+    expect(blogsInDbAfterDeleteAsString).toContain(blogToBeDeleted.title)
+    expect(userAfterDelete.blogs).toHaveLength(userBeforeDelete.blogs.length)
   })
 })
 
