@@ -84,7 +84,7 @@ describe('DELETE /api/blogs request tests', () => {
 
     const userBeforeDelete = await User.findById(userZerocool.id)
 
-    await api
+    const response = await api
       .delete(`/api/blogs/${blogToBeDeleted.id}`)
       .set('Authorization', `bearer ${userAcidburn.token}`)
       .expect(401)
@@ -98,6 +98,7 @@ describe('DELETE /api/blogs request tests', () => {
     expect(blogsInDbAfterDeleteAsString).toContain(blogToBeDeleted.url)
     expect(blogsInDbAfterDeleteAsString).toContain(blogToBeDeleted.title)
     expect(userAfterDelete.blogs).toHaveLength(userBeforeDelete.blogs.length)
+    expect(response.body.error).toContain('blog not created by user')
   })
 })
 
