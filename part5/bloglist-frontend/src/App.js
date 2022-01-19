@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Button from './components/Button'
 import LoginForm from './components/LoginForm'
-import NoteForm from './components/NoteForm'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -33,6 +34,8 @@ const App = () => {
     }
   }, [])
 
+  const blogFormRef = useRef()
+
   const handleCreateNote = async (event) => {
     event.preventDefault()
     const newNote = {
@@ -47,6 +50,7 @@ const App = () => {
       setUrl('')
       setBlogs(blogs.concat(response))
       notifyUser(`a new blog ${response.title} by ${response.author} was added`, true)
+      blogFormRef.current.toggleVisibility()
     } catch(expection) {
       notifyUser(`adding the blog failed`, false)
     }
@@ -112,16 +116,18 @@ const App = () => {
         <h2>blogs</h2>
           <Notification successful={successfulOperation} message={notificationMessage} />
           <p>{`${user.name} logged in`} <Button text="logout" onClick={handleLogout} /></p>
-        <h2>create new</h2>
-          <NoteForm 
-            author={author}
-            setAuthor={setAuthor}
-            title={title}
-            setTitle={setTitle}
-            url={url}
-            setUrl={setUrl}
-            onSubmit={handleCreateNote}
-          />
+        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+          <h2>create new</h2>
+            <BlogForm 
+              author={author}
+              setAuthor={setAuthor}
+              title={title}
+              setTitle={setTitle}
+              url={url}
+              setUrl={setUrl}
+              onSubmit={handleCreateNote}
+            />
+        </Togglable>
           <br/>
           {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
       </div>

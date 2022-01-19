@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button'
 
-const NoteForm = ({ author, setAuthor, url, setUrl, title, setTitle, onSubmit}) => {
+const BlogForm = ({ author, setAuthor, url, setUrl, title, setTitle, onSubmit}) => {
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value)
@@ -31,4 +31,4 @@ const NoteForm = ({ author, setAuthor, url, setUrl, title, setTitle, onSubmit}) 
   )
 }
 
-export default NoteForm
+export default BlogForm
