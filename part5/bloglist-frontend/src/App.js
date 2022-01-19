@@ -3,12 +3,15 @@ import Blog from './components/Blog'
 import Button from './components/Button'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [author, setAuthor] = useState('')
   const [blogs, setBlogs] = useState([])
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [successfulOperation, setSuccessfulOperation] = useState(null)
   const [password, setPassword] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
@@ -43,8 +46,9 @@ const App = () => {
       setAuthor('')
       setUrl('')
       setBlogs(blogs.concat(response))
+      notifyUser(`a new blog ${response.title} by ${response.author} was added`, true)
     } catch(expection) {
-      console.log('Operation failed')
+      notifyUser(`adding the blog failed`, false)
     }
   }
 
@@ -65,21 +69,34 @@ const App = () => {
       setUser(loggedInUser)
       setUsername('')
       setPassword('')
+      notifyUser(`logged in ${loggedInUser.name}`, true)
     } catch (expection) {
-      console.log('Wrong credentials')
+      notifyUser('Wrong username or password', false)
     }
-
   }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
+    notifyUser(`logged out ${user.name}`, true)
     setUser(null)
     blogService.setToken(null)
+  }
+
+  const notifyUser = ( message, wasSuccessful ) => {
+    setNotificationMessage(message)
+    setSuccessfulOperation(wasSuccessful)
+    
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setSuccessfulOperation(null)
+    }, 5000)
   }
 
   if (user === null) {
     return(
       <div>
         <h2>Log in to the application</h2>
+        <Notification successful={successfulOperation} message={notificationMessage} />
         <LoginForm 
           username={username} 
           setUsername={setUsername} 
@@ -93,6 +110,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
+          <Notification successful={successfulOperation} message={notificationMessage} />
           <p>{`${user.name} logged in`} <Button text="logout" onClick={handleLogout} /></p>
         <h2>create new</h2>
           <NoteForm 
