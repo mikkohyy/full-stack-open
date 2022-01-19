@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from './Button'
 
-const BlogForm = ({ author, setAuthor, url, setUrl, title, setTitle, onSubmit}) => {
+const BlogForm = ({ createBlog }) => {
+  const [author, setAuthor] = useState('')
+  const [title, setTitle] = useState('')
+  const [url, setUrl] = useState('')
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value)
@@ -15,8 +18,21 @@ const BlogForm = ({ author, setAuthor, url, setUrl, title, setTitle, onSubmit}) 
     setUrl(event.target.value)
   }
   
+  const addBlog = (event) => {
+    event.preventDefault()
+    const newBlog = {
+      author,
+      title,
+      url
+    }
+    createBlog(newBlog)
+    setAuthor('')
+    setTitle('')
+    setUrl('')
+  } 
+
   return(
-    <form onSubmit={onSubmit}>
+    <form onSubmit={addBlog}>
       <div>
         title: <input type="text" value={title} name="Title" onChange={handleTitleChange} />
       </div>
