@@ -18,7 +18,7 @@ const BlogForm = ({ createBlog }) => {
   const handleUrlChange = (event) => {
     setUrl(event.target.value)
   }
-  
+
   const addBlog = (event) => {
     event.preventDefault()
     const newBlog = {
@@ -30,7 +30,7 @@ const BlogForm = ({ createBlog }) => {
     setAuthor('')
     setTitle('')
     setUrl('')
-  } 
+  }
 
   return(
     <form onSubmit={addBlog}>

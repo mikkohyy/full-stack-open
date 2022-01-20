@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -42,13 +42,13 @@ const App = () => {
       notifyUser(`a new blog ${response.title} by ${response.author} was added`, true)
       blogFormRef.current.toggleVisibility()
     } catch(expection) {
-      notifyUser(`adding the blog failed`, false)
+      notifyUser('adding the blog failed', false)
     }
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const loggedInUser = await loginService.login({
         username, password
@@ -86,7 +86,7 @@ const App = () => {
   const notifyUser = ( message, wasSuccessful ) => {
     setNotificationMessage(message)
     setSuccessfulOperation(wasSuccessful)
-    
+
     setTimeout(() => {
       setNotificationMessage(null)
       setSuccessfulOperation(null)
@@ -109,10 +109,10 @@ const App = () => {
       <div>
         <h2>Log in to the application</h2>
         <Notification successful={successfulOperation} message={notificationMessage} />
-        <LoginForm 
-          username={username} 
-          setUsername={setUsername} 
-          password={password} 
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
           setPassword={setPassword}
           handleLogin={handleLogin}
         />
@@ -122,21 +122,21 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-          <Notification successful={successfulOperation} message={notificationMessage} />
-          <p>{`${user.name} logged in`} <Button text="logout" onClick={handleLogout} /></p>
+        <Notification successful={successfulOperation} message={notificationMessage} />
+        <p>{`${user.name} logged in`} <Button text="logout" onClick={handleLogout} /></p>
         <Togglable buttonLabel="create new blog" ref={blogFormRef}>
           <h2>create new</h2>
-            <BlogForm createBlog={handleCreateBlog} />
+          <BlogForm createBlog={handleCreateBlog} />
         </Togglable>
-          <br/>
-          {blogs.map(blog => 
-            <Blog 
-              key={blog.id} 
-              blog={blog} 
-              updateBlog={handleUpdateBlog} 
-              removeBlog={handleRemoveBlog}
-            />
-          )}
+        <br/>
+        {blogs.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={handleUpdateBlog}
+            removeBlog={handleRemoveBlog}
+          />
+        )}
       </div>
     )
   }

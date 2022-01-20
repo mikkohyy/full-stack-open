@@ -4,7 +4,7 @@ const Notification = ({ successful, message }) => {
   if (message === null) {
     return null
   }
-  
+
   const notificationStyle = {
     color: successful === true ? 'green' : 'red',
     background: 'lightgrey',

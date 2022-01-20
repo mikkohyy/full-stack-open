@@ -6,8 +6,8 @@ const Togglable = React.forwardRef((props, ref) => {
   const { buttonLabel, children } = props
 
 
-  const hiddenWhenVisible = { display: visible ? 'none' : ''}
-  const shownWhenVisible = { display: visible ? '' : 'none'}
+  const hiddenWhenVisible = { display: visible ? 'none' : '' }
+  const shownWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -31,5 +31,7 @@ const Togglable = React.forwardRef((props, ref) => {
     </div>
   )
 })
+
+Togglable.displayName = 'Togglable'
 
 export default Togglable

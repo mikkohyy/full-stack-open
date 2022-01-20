@@ -18,7 +18,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   const buttonText = viewText ? 'view' : 'hide'
   const showWhenVisible = { display: showAdditionalInfo ? '' : 'none' }
 
-  const addLikeToBlogAndUpdate = () => {    
+  const addLikeToBlogAndUpdate = () => {
     const likedBlog = {
       author: blog.author,
       id: blog.id,
@@ -27,7 +27,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       url: blog.url,
       user: blog.user.id
     }
-      
+
     updateBlog(likedBlog)
   }
 
@@ -45,7 +45,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   return (
     <div style={blogStyle}>
       <div>
-        "{blog.title}" by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
+        &quot;{blog.title}&quot; by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
       </div>
       <div style={showWhenVisible}>
         {blog.url}<br/>
@@ -55,7 +55,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       </div>
     </div>
   )
-}  
+}
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
