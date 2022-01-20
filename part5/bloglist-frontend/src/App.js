@@ -8,6 +8,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notificationMessage, setNotificationMessage] = useState(null)
@@ -18,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
     )  
   }, [])
 
@@ -36,7 +37,8 @@ const App = () => {
   const handleCreateBlog = async (newBlog) => {
     try {
       const response = await blogService.create(newBlog)
-      setBlogs(blogs.concat(response))
+      const updatedBlogs = blogs.concat(response)
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
       notifyUser(`a new blog ${response.title} by ${response.author} was added`, true)
       blogFormRef.current.toggleVisibility()
     } catch(expection) {
@@ -74,6 +76,13 @@ const App = () => {
     blogService.setToken(null)
   }
 
+  const handleUpdateBlog = async (updatedInfo) => {
+    const updatedBlog = await blogService.update(updatedInfo)
+    const updatedBlogs = blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog)
+    const sortedUpdatedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
+    setBlogs(sortedUpdatedBlogs)
+  }
+
   const notifyUser = ( message, wasSuccessful ) => {
     setNotificationMessage(message)
     setSuccessfulOperation(wasSuccessful)
@@ -82,6 +91,17 @@ const App = () => {
       setNotificationMessage(null)
       setSuccessfulOperation(null)
     }, 5000)
+  }
+
+  const handleRemoveBlog = async (blogToBeRemoved) => {
+    try {
+      await blogService.remove(blogToBeRemoved.id)
+      notifyUser(`Deleted ${blogToBeRemoved.title} by ${blogToBeRemoved.author}`, true)
+      const updatedBlogs = blogs.filter(blog => blog.id !== blogToBeRemoved.id)
+      setBlogs(updatedBlogs)
+    } catch (expection) {
+      notifyUser('Was not able to delete the blog', false)
+    }
   }
 
   if (user === null) {
@@ -109,7 +129,14 @@ const App = () => {
             <BlogForm createBlog={handleCreateBlog} />
         </Togglable>
           <br/>
-          {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+          {blogs.map(blog => 
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              updateBlog={handleUpdateBlog} 
+              removeBlog={handleRemoveBlog}
+            />
+          )}
       </div>
     )
   }

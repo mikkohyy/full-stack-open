@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from './Button'
 
-const Blog = ({blog}) => {
+const Blog = ({ blog, updateBlog, removeBlog}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -17,6 +17,25 @@ const Blog = ({blog}) => {
   const buttonText = viewText ? 'view' : 'hide'
   const showWhenVisible = { display: showAdditionalInfo ? '' : 'none' }
 
+  const addLikeToBlogAndUpdate = () => {    
+    const likedBlog = {
+      author: blog.author,
+      id: blog.id,
+      likes: blog.likes + 1,
+      title: blog.title,
+      url: blog.url,
+      user: blog.user.id
+    }
+      
+    updateBlog(likedBlog)
+  }
+
+  const removeThisBlog = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      removeBlog(blog)
+    }
+  }
+
   const viewHideAdditionalInfo = () => {
     setViewText(!viewText)
     setShowAdditionalInfo(!showAdditionalInfo)
@@ -29,8 +48,9 @@ const Blog = ({blog}) => {
       </div>
       <div style={showWhenVisible}>
         {blog.url}<br/>
-        {blog.likes} <Button text="like" /><br/>
+        {blog.likes} <Button text="like" onClick={addLikeToBlogAndUpdate} /><br/>
         {blog.user.name}<br/>
+        <Button text="remove" onClick={removeThisBlog}/>
       </div>
     </div>
   )
