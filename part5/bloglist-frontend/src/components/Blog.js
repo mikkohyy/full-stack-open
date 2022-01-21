@@ -47,7 +47,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       <div>
         &quot;{blog.title}&quot; by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
       </div>
-      <div style={showWhenVisible}>
+      <div className='additionalBlogInfo' style={showWhenVisible}>
         {blog.url}<br/>
         {blog.likes} <Button text="like" onClick={addLikeToBlogAndUpdate} /><br/>
         {blog.user.name}<br/>
