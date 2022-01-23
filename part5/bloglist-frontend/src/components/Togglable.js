@@ -5,7 +5,6 @@ const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
   const { buttonLabel, children } = props
 
-
   const hiddenWhenVisible = { display: visible ? 'none' : '' }
   const shownWhenVisible = { display: visible ? '' : 'none' }
 

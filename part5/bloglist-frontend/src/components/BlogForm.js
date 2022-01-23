@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Button from './Button'
 import PropTypes from 'prop-types'
 
 const BlogForm = ({ createBlog }) => {
@@ -43,7 +42,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         url: <input id='url' type="text" value={url} name="Url" onChange={handleUrlChange} />
       </div>
-      <Button text="create" />
+      <button id='create-button'>create</button>
     </form>
   )
 }

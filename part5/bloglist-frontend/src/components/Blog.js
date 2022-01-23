@@ -43,7 +43,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div>
         &quot;{blog.title}&quot; by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
       </div>

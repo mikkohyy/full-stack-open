@@ -21,7 +21,7 @@ describe('Blog app', function() {
   })
 
   describe('Login', function() {
-    it('succeeds with correct credentials', function() {
+    it('Succeeds with correct credentials', function() {
       cy.get('#login-input-username').type('zerocool')
       cy.get('#login-input-password').type('loocorez')
       cy.get('#login-button').click()
@@ -33,7 +33,7 @@ describe('Blog app', function() {
       cy.contains('create new')
     })
 
-    it('fails with wrong credentials', function() {
+    it('Fails with wrong credentials', function() {
       cy.get('#login-input-username').type('zerocool')
       cy.get('#login-input-password').type('i-hack')
       cy.get('#login-button').click()
@@ -45,6 +45,29 @@ describe('Blog app', function() {
         .should('contain', 'username')
         .and('contain', 'password')
       cy.get('#login-button').should('contain', 'login')
+    })
+  })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.get('#login-input-username').type('zerocool')
+      cy.get('#login-input-password').type('loocorez')
+      cy.get('#login-button').click()
+    })
+
+    it.only('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('React patterns')
+      cy.get('#author').type('Michael Chan')
+      cy.get('#url').type('https://reactpatterns.com/')
+      cy.get('#create-button').click()
+
+      cy.get('.blog:first')
+        .should('contain', '"React patterns" by Michael Chan')
+
+      cy.get('.notification-field')
+        .should('contain', 'a new blog React patterns by Michael Chan was added')
+        .and('have.css', 'color', 'rgb(0, 128, 0)')
     })
   })
 
