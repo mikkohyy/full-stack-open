@@ -79,11 +79,43 @@ describe('Blog app', function() {
         cy.get('#create-button').click()
       })
 
-      it.only('User can add a like to a blog', function() {
+      it('User can add a like to a blog', function() {
         cy.contains('view').click()
         cy.get('.blog-likes:first').should('contain', '0')
         cy.contains('like').click()
         cy.get('.blog-likes:first').should('contain', '1')
+      })
+
+      it('User can delete it', function() {
+        cy.contains('view').click()
+        cy.contains('remove').click()
+
+        cy.get('.notification-field')
+          .should('contain', 'Deleted React patterns by Michael Chan')
+          .and('have.css', 'color', 'rgb(0, 128, 0)')
+        cy.contains('"React patterns" by Michael Chan').should('not.exist')
+      })
+
+      it.only('Only user who has added the blog can delete it', function() {
+        const user = {
+          username: 'acidburn',
+          name: 'Kate Libby',
+          password: 'nrubdica'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users', user)
+        cy.contains('logout').click()
+
+        cy.get('#login-input-username').type('acidburn')
+        cy.get('#login-input-password').type('nrubdica')
+        cy.get('#login-button').click()
+
+        cy.contains('view').click()
+        cy.contains('remove').click()
+
+        cy.get('.notification-field')
+          .should('contain', 'Was not able to delete the blog')
+          .and('have.css', 'color', 'rgb(255, 0, 0)')
+        cy.contains('"React patterns" by Michael Chan')
       })
     })
   })
