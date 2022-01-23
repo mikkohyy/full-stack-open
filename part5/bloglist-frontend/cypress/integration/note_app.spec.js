@@ -55,7 +55,7 @@ describe('Blog app', function() {
       cy.get('#login-button').click()
     })
 
-    it.only('A blog can be created', function() {
+    it('A blog can be created', function() {
       cy.contains('create new blog').click()
       cy.get('#title').type('React patterns')
       cy.get('#author').type('Michael Chan')
@@ -69,6 +69,22 @@ describe('Blog app', function() {
         .should('contain', 'a new blog React patterns by Michael Chan was added')
         .and('have.css', 'color', 'rgb(0, 128, 0)')
     })
-  })
 
+    describe('When a blog already exists', function() {
+      beforeEach(function() {
+        cy.contains('create new blog').click()
+        cy.get('#title').type('React patterns')
+        cy.get('#author').type('Michael Chan')
+        cy.get('#url').type('https://reactpatterns.com/')
+        cy.get('#create-button').click()
+      })
+
+      it.only('User can add a like to a blog', function() {
+        cy.contains('view').click()
+        cy.get('.blog-likes:first').should('contain', '0')
+        cy.contains('like').click()
+        cy.get('.blog-likes:first').should('contain', '1')
+      })
+    })
+  })
 })
