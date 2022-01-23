@@ -2,7 +2,7 @@ import React from 'react'
 
 const LoginForm = ({ username, setUsername, password, setPassword, handleLogin }) => {
   return (
-    <form onSubmit={handleLogin}>
+    <form id="login-form" onSubmit={handleLogin}>
       <div>
         username
         <input
@@ -22,7 +22,7 @@ const LoginForm = ({ username, setUsername, password, setPassword, handleLogin }
         />
       </div>
       <div>
-        <button type="submit">login</button>
+        <button id="login-button" type="submit">login</button>
       </div>
     </form>
   )
