@@ -50,9 +50,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.get('#login-input-username').type('zerocool')
-      cy.get('#login-input-password').type('loocorez')
-      cy.get('#login-button').click()
+      cy.login('zerocool', 'loocorez')
     })
 
     it('A blog can be created', function() {
@@ -70,7 +68,7 @@ describe('Blog app', function() {
         .and('have.css', 'color', 'rgb(0, 128, 0)')
     })
 
-    describe('When a blog already exists', function() {
+    describe('When a blog exists', function() {
       beforeEach(function() {
         cy.contains('create new blog').click()
         cy.get('#title').type('React patterns')
@@ -96,7 +94,7 @@ describe('Blog app', function() {
         cy.contains('"React patterns" by Michael Chan').should('not.exist')
       })
 
-      it.only('Only user who has added the blog can delete it', function() {
+      it('Only user who has added the blog can delete it', function() {
         const user = {
           username: 'acidburn',
           name: 'Kate Libby',
@@ -105,9 +103,7 @@ describe('Blog app', function() {
         cy.request('POST', 'http://localhost:3003/api/users', user)
         cy.contains('logout').click()
 
-        cy.get('#login-input-username').type('acidburn')
-        cy.get('#login-input-password').type('nrubdica')
-        cy.get('#login-button').click()
+        cy.login('acidburn', 'nrubdica')
 
         cy.contains('view').click()
         cy.contains('remove').click()
@@ -117,6 +113,57 @@ describe('Blog app', function() {
           .and('have.css', 'color', 'rgb(255, 0, 0)')
         cy.contains('"React patterns" by Michael Chan')
       })
+    })
+  })
+  describe('When many blogs', function() {
+    it('Blogs are printed in the right order', function() {
+      const rightBlogOrder = [
+        'Canonical string reduction',
+        'First class tests',
+        'React patterns',
+        'TDD harms architecture',
+      ]
+
+      cy.login('zerocool', 'loocorez')
+
+      cy.addBlog({
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+      })
+
+      cy.addBlog({
+        title: 'Canonical string reduction',
+        author: 'Edsger W. Dijkstra',
+        url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+        likes: 12,
+      })
+
+      cy.addBlog({
+        title: 'TDD harms architecture',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+        likes: 0,
+      })
+
+      cy.addBlog({
+        title: 'First class tests',
+        author: 'Robert C. Martin',
+        url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+        likes: 10,
+      })
+
+      cy.reload()
+
+      cy.get('.blog-info')
+        .then((blogs) => {
+          let visibleBlogs = Cypress._.map(blogs, (blog) => { return blog.innerHTML })
+          for (let i=0;i<rightBlogOrder.length;i++) {
+            expect(visibleBlogs[i]).to.contain(rightBlogOrder[i])
+          }
+        })
+
     })
   })
 })

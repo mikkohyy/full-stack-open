@@ -44,7 +44,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   return (
     <div className="blog" style={blogStyle}>
-      <div>
+      <div className="blog-info">
         &quot;{blog.title}&quot; by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
       </div>
       <div className='additionalBlogInfo' style={showWhenVisible}>
