@@ -6,6 +6,7 @@ const LoginForm = ({ username, setUsername, password, setPassword, handleLogin }
       <div>
         username
         <input
+          id="login-input-username"
           type="text"
           value={username}
           name="Username"
@@ -15,6 +16,7 @@ const LoginForm = ({ username, setUsername, password, setPassword, handleLogin }
       <div>
         password
         <input
+          id="login-input-password"
           type="password"
           value={password}
           name="Password"
