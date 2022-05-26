@@ -1,3 +1,23 @@
+export const voteAnecdote = (id) => {
+  return {
+    type: 'VOTE',
+    data: {
+      id: id
+    }
+  }
+}
+
+export const addAnecdote = (content) => {
+  return {
+    type: "ADD_ANECDOTE",
+    data: {
+      content: content,
+      votes: 0,
+      id: getId()
+    }
+  }
+}
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -24,11 +44,11 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   switch(action.type) {
     case 'VOTE': {
-      const updatedState = addVote(action.id, state)
+      const updatedState = addVote(action.data.id, state)
       return updatedState
     }
     case 'ADD_ANECDOTE': {
-      const updatedAnecdotes = state.concat(asObject(action.content))
+      const updatedAnecdotes = state.concat(action.data)
       return updatedAnecdotes
     }
     default:

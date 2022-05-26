@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { voteAnecdote } from '../reducers/anecdoteReducer'
 
 const Anecdotes = () => {
   const vote = (id) => {
-    dispatch({ type: 'VOTE', id: id })
+    dispatch(voteAnecdote(id))
   }
   
   const dispatch = useDispatch()
@@ -10,7 +11,6 @@ const Anecdotes = () => {
 
   return (
     <div>
-      <h2>Anecdotes</h2>
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
