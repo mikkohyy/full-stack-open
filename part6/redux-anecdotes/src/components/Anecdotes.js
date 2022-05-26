@@ -6,7 +6,7 @@ const Anecdotes = () => {
   }
   
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.sort((a, b) => { return b.votes - a.votes }))
 
   return (
     <div>
