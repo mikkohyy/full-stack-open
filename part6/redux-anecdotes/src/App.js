@@ -1,4 +1,4 @@
-import Anecdotes from './components/Anecdotes'
+import Anecdotes from './components/AnecdoteList'
 import Form from './components/AnecdoteForm'
 
 const App = () => {
