@@ -26,8 +26,10 @@ const Anecdotes = () => {
   }
   
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.anecdotes
-    .sort((a, b) => { return b.votes - a.votes }))
+  const filteredWord = useSelector(state => state.filter);
+  const filteredAnecdotes = useSelector(state => state.anecdotes
+    .filter((anecdote) => anecdote.content.includes(filteredWord)))
+  const anecdotes = filteredAnecdotes.sort((a, b) => { return b.votes - a.votes })
 
   return (
     <div>
