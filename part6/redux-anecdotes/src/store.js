@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import anecdoteReducer from './reducers/anecdoteReducer'
+import reducer from './reducers/anecdoteReducer'
 
 export const store = configureStore({
   reducer: {
-    anecdotes: anecdoteReducer
+    anecdotes: reducer
   }
 })
