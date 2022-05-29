@@ -7,4 +7,4 @@ export const store = configureStore({
     anecdotes: anecdoteReducer,
     notification: notificationReducer
   }
-})
+})  
