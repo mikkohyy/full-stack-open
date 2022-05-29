@@ -1,11 +1,14 @@
+import { useSelector } from 'react-redux'
 import Anecdotes from './components/AnecdoteList'
 import Form from './components/AnecdoteForm'
 import Notification from './components/Notification'
 
 const App = () => {
+  const visible = useSelector(state => state.notification.visible)
+
   return (
     <div>
-      <Notification />
+      {visible && <Notification />}
       <h2>Anecdotes</h2>
       <Anecdotes />
       <Form />
