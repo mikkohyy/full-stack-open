@@ -11,7 +11,7 @@ export const voteAnecdote = (id) => {
 
 export const addAnecdote = (content) => {
   return {
-    type: "ADD_ANECDOTE",
+    type: 'ADD_ANECDOTE',
     data: {
       newAnecdote: content
     }
@@ -21,10 +21,20 @@ export const addAnecdote = (content) => {
 
 export const setAnecdotes = (anecdotes) => {
   return {
-  type: "SET_ANECDOTES",
+    type: 'SET_ANECDOTES',
     data: {
       anecdotes: anecdotes
     }
+  }
+}
+
+export const setNotification = (text, showTime) => {
+  return {
+    type: 'SET_NOTIFICATION',
+    data: {
+      text: text,
+      showTime: showTime
+    }  
   }
 }
 
