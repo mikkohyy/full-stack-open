@@ -11,9 +11,7 @@ export const addAnecdote = (content) => {
   return {
     type: "ADD_ANECDOTE",
     data: {
-      content: content,
-      votes: 0,
-      id: getId()
+      newAnecdote: content
     }
   }
 }
@@ -28,8 +26,6 @@ export const setAnecdotes = (anecdotes) => {
   }
 }
 
-const getId = () => (100000 * Math.random()).toFixed(0)
-
 const initialState = []
 
 const anecdoteReducer = (state = initialState, action) => {
@@ -41,7 +37,7 @@ const anecdoteReducer = (state = initialState, action) => {
       return updatedState
     }
     case 'ADD_ANECDOTE': {
-      const updatedAnecdotes = state.concat(action.data)
+      const updatedAnecdotes = state.concat(action.data.newAnecdote)
       return updatedAnecdotes
     } case 'SET_ANECDOTES' : {
       const currentAnecdotes = action.data.anecdotes;
