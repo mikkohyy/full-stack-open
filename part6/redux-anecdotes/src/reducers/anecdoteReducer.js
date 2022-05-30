@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 export const voteAnecdote = (id) => {
   return {
     type: 'VOTE',
@@ -57,6 +59,13 @@ const addVote = (id, anecdotes) => {
   )
 
   return updatedAnecdotes
+}
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch(setAnecdotes(anecdotes))
+  }
 }
 
 export default anecdoteReducer
