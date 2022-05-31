@@ -18,23 +18,12 @@ export const addAnecdote = (content) => {
   }
 }
 
-
 export const setAnecdotes = (anecdotes) => {
   return {
     type: 'SET_ANECDOTES',
     data: {
       anecdotes: anecdotes
     }
-  }
-}
-
-export const setNotification = (text, showTime) => {
-  return {
-    type: 'SET_NOTIFICATION',
-    data: {
-      text: text,
-      showTime: showTime
-    }  
   }
 }
 
