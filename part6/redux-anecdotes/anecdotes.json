@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 7
+      "votes": 8
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -34,6 +34,11 @@
       "content": "Before software can be reusable it first has to be usable.",
       "votes": 1,
       "id": "aAL2hrU"
+    },
+    {
+      "content": "Indeed, the ratio of time spent reading versus writing is well over 10 to 1. We are constantly reading old code as part of the effort to write new code. ...[Therefore,] making it easy to read makes it easier to write",
+      "votes": 0,
+      "id": "WJoc8uR"
     }
   ]
 }
