@@ -32,7 +32,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   }
 
   const removeThisBlog = () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+    if (window.confirm(`Remove blog ${blog.title} written by ${blog.author}`)) {
       removeBlog(blog)
     }
   }
