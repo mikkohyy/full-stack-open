@@ -14,7 +14,7 @@ afterAll(() => {
 })
 
 describe('login tests', () => {
-  test('user is logged in when right password is given', async() => {
+  test('user is logged in when right password is given', async () => {
     const addedUser = await helper.addIndividualUser()
     const userPassword = addedUser.username.split('').reverse().join('')
 
@@ -28,7 +28,7 @@ describe('login tests', () => {
     expect(response.body.name).toBe('Dade Murphy')
   })
 
-  test('existing user is not logged in when wrong password is given', async() => {
+  test('existing user is not logged in when wrong password is given', async () => {
     const addedUser = await helper.addIndividualUser()
 
     const response = await api
@@ -41,7 +41,7 @@ describe('login tests', () => {
     expect(response.body.error).toContain('invalid username or password')
   })
 
-  test('user is not logged if user does not exist', async() => {
+  test('user is not logged if user does not exist', async () => {
     const response = await api
       .post('/api/login')
       .send({ username: 'neuromancer', password: 'itrytohack' })

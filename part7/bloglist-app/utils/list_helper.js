@@ -9,14 +9,13 @@ const favouriteBlog = (blogs) => {
   let favouriteBlogInfo = {}
 
   if (blogs.length !== 0) {
-
-    const maxLikes = Math.max(...blogs.map((blog => blog.likes)))
-    const blogWithMostLikes = blogs.find(blog => blog.likes === maxLikes)
+    const maxLikes = Math.max(...blogs.map((blog) => blog.likes))
+    const blogWithMostLikes = blogs.find((blog) => blog.likes === maxLikes)
 
     favouriteBlogInfo = {
       title: blogWithMostLikes.title,
       author: blogWithMostLikes.author,
-      likes: blogWithMostLikes.likes
+      likes: blogWithMostLikes.likes,
     }
   }
 
@@ -24,38 +23,46 @@ const favouriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  const authorSummary = _.reduce(blogs, (summaryByAuthor, blog) => {
-    summaryByAuthor[blog.author] = (summaryByAuthor[blog.author] || 0) + 1
-    return summaryByAuthor
-  }, {})
+  const authorSummary = _.reduce(
+    blogs,
+    (summaryByAuthor, blog) => {
+      summaryByAuthor[blog.author] = (summaryByAuthor[blog.author] || 0) + 1
+      return summaryByAuthor
+    },
+    {}
+  )
 
   let authorsWithBlogs = []
 
   _.forIn(authorSummary, (value, key) => {
     const authorInfo = {
       author: key,
-      blogs: value
+      blogs: value,
     }
     authorsWithBlogs.push(authorInfo)
   })
 
-  const authorWithMostBlogs = _.maxBy(authorsWithBlogs,'blogs')
+  const authorWithMostBlogs = _.maxBy(authorsWithBlogs, 'blogs')
 
   return authorWithMostBlogs || {}
 }
 
 const mostLikes = (blogs) => {
-  const likesSummary = _.reduce(blogs, (authorLikes, blog) => {
-    authorLikes[blog.author] = (authorLikes[blog.author] || 0) + blog.likes
-    return authorLikes
-  }, {})
+  const likesSummary = _.reduce(
+    blogs,
+    (authorLikes, blog) => {
+      authorLikes[blog.author] = (authorLikes[blog.author] || 0) + blog.likes
+      return authorLikes
+    },
+    {}
+  )
 
   let authorsWithLikes = []
 
   _.forIn(likesSummary, (value, key) => {
     const authorInfo = {
       author: key,
-      likes: value
+      likes: value,
     }
     authorsWithLikes.push(authorInfo)
   })
@@ -72,10 +79,10 @@ const totalLikes = (blogs) => {
   return totalLikes
 }
 
-module.exports =  {
+module.exports = {
   dummy,
   favouriteBlog,
   mostBlogs,
   mostLikes,
-  totalLikes
+  totalLikes,
 }

@@ -9,8 +9,8 @@ const listWithOneBlog = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
-    __v: 0
-  }
+    __v: 0,
+  },
 ]
 
 const listWithManyBlogs = [
@@ -20,7 +20,7 @@ const listWithManyBlogs = [
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
     likes: 7,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422aa71b54a676234d17f8',
@@ -28,7 +28,7 @@ const listWithManyBlogs = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422b3a1b54a676234d17f9',
@@ -36,7 +36,7 @@ const listWithManyBlogs = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
     likes: 12,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '61dc78ce53d167a48734aaf7',
@@ -44,7 +44,7 @@ const listWithManyBlogs = [
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/better-tooling-wont-fix-your-api/',
     likes: 12,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422b891b54a676234d17fa',
@@ -52,7 +52,7 @@ const listWithManyBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
     likes: 10,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '61dc844a82be32a99cabcaeb',
@@ -60,7 +60,7 @@ const listWithManyBlogs = [
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/how-graphql-blows-rest-out-of-the-water/',
     likes: 3,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422ba71b54a676234d17fb',
@@ -68,7 +68,7 @@ const listWithManyBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '61ddd8972d4d44dfc2b13bc4',
@@ -76,7 +76,7 @@ const listWithManyBlogs = [
     author: 'Swizec Teller',
     url: 'https://swizec.com/blog/the-quickest-way-to-fail-a-tech-interview/',
     likes: 2,
-    __v: 0
+    __v: 0,
   },
   {
     _id: '5a422bc61b54a676234d17fc',
@@ -84,14 +84,14 @@ const listWithManyBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
-    __v: 0
-  }
+    __v: 0,
+  },
 ]
 
 test('dummy returns one', () => {
   const blogs = []
 
-  const result  = listHelper.dummy(blogs)
+  const result = listHelper.dummy(blogs)
   expect(result).toBe(1)
 })
 
@@ -129,7 +129,6 @@ describe('favourite blog', () => {
     const result = listHelper.favouriteBlog(listWithOneBlog)
 
     expect(result).toEqual(expectedResult)
-
   })
 })
 
@@ -137,7 +136,7 @@ test('return the right blog when many blogs', () => {
   const expectedResult = {
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
-    likes: 12
+    likes: 12,
   }
 
   const result = listHelper.favouriteBlog(listWithManyBlogs)
@@ -157,7 +156,7 @@ describe('author with most blogs', () => {
   test('return right author when one blog', () => {
     const expectedResult = {
       author: 'Edsger W. Dijkstra',
-      blogs: 1
+      blogs: 1,
     }
 
     const result = listHelper.mostBlogs(listWithOneBlog)
@@ -168,7 +167,7 @@ describe('author with most blogs', () => {
   test('return right author when many blogs', () => {
     const expectedResult = {
       author: 'Swizec Teller',
-      blogs: 3
+      blogs: 3,
     }
 
     const result = listHelper.mostBlogs(listWithManyBlogs)
@@ -200,7 +199,7 @@ describe('author with most likes', () => {
   test('return right author when many blogs', () => {
     const expectedResult = {
       author: 'Edsger W. Dijkstra',
-      likes: 17
+      likes: 17,
     }
 
     const result = listHelper.mostLikes(listWithManyBlogs)

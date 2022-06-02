@@ -25,7 +25,9 @@ const tokenExtractor = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  const decodedToken = request.token ? jwt.verify(request.token, process.env.SECRET) : 'none'
+  const decodedToken = request.token
+    ? jwt.verify(request.token, process.env.SECRET)
+    : 'none'
 
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
@@ -37,8 +39,8 @@ const userExtractor = async (request, response, next) => {
   next()
 }
 
-module.exports =  {
+module.exports = {
   errorHandler,
   tokenExtractor,
-  userExtractor
+  userExtractor,
 }

@@ -47,7 +47,7 @@ describe('DELETE /api/blogs request tests', () => {
     const blogsInDbBeforeDelete = await helper.getBlogsInDb()
     const blogToBeDeleted = _.first(blogsInDbBeforeDelete)
 
-    userZerocool.blogs = blogsInDbBeforeDelete.map(blog => blog.id)
+    userZerocool.blogs = blogsInDbBeforeDelete.map((blog) => blog.id)
 
     await User.findByIdAndUpdate(userZerocool.id, userZerocool, { new: true })
 
@@ -66,7 +66,9 @@ describe('DELETE /api/blogs request tests', () => {
     expect(blogsInDbAfterDelete).toHaveLength(blogsInDbBeforeDelete.length - 1)
     expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.url)
     expect(blogsInDbAfterDeleteAsString).not.toContain(blogToBeDeleted.title)
-    expect(userAfterDelete.blogs).toHaveLength(userBeforeDelete.blogs.length-1)
+    expect(userAfterDelete.blogs).toHaveLength(
+      userBeforeDelete.blogs.length - 1
+    )
   })
 
   test('user who did not add the blog cannot delete it', async () => {
@@ -78,7 +80,7 @@ describe('DELETE /api/blogs request tests', () => {
     const blogsInDbBeforeDelete = await helper.getBlogsInDb()
     const blogToBeDeleted = _.first(blogsInDbBeforeDelete)
 
-    userZerocool.blogs = blogsInDbBeforeDelete.map(blog => blog.id)
+    userZerocool.blogs = blogsInDbBeforeDelete.map((blog) => blog.id)
 
     await User.findByIdAndUpdate(userZerocool.id, userZerocool, { new: true })
 
@@ -116,11 +118,19 @@ describe('POST /api/blogs request tests', () => {
       .send(helper.individualBlog)
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
-    const blogsInDbAfterPostRequestString = JSON.stringify(blogsInDbAfterPostRequest)
+    const blogsInDbAfterPostRequestString = JSON.stringify(
+      blogsInDbAfterPostRequest
+    )
 
-    expect(blogsInDbAfterPostRequest).toHaveLength(blogsInDbBeforePostRequest.length+1)
-    expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.author)
-    expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.title)
+    expect(blogsInDbAfterPostRequest).toHaveLength(
+      blogsInDbBeforePostRequest.length + 1
+    )
+    expect(blogsInDbAfterPostRequestString).toContain(
+      helper.individualBlog.author
+    )
+    expect(blogsInDbAfterPostRequestString).toContain(
+      helper.individualBlog.title
+    )
     expect(blogsInDbAfterPostRequestString).toContain(helper.individualBlog.url)
   })
 
@@ -136,27 +146,28 @@ describe('POST /api/blogs request tests', () => {
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
 
-    expect(blogsInDbAfterPostRequest).toHaveLength(blogsInDbBeforePostRequest.length)
+    expect(blogsInDbAfterPostRequest).toHaveLength(
+      blogsInDbBeforePostRequest.length
+    )
     expect(response.body).toHaveProperty('error')
     expect(response.body.error).toContain('token missing or invalid')
   })
 
-  test('if title and url are missing, responds with 401 Invalid request', async() => {
+  test('if title and url are missing, responds with 401 Invalid request', async () => {
     await helper.addMultipleBlogs()
 
     const blogObjectWithoutTitleAndUrl = {
       author: helper.individualBlog.author,
-      likes: 23
+      likes: 23,
     }
 
-    await api
-      .post('/api/blogs')
-      .send(blogObjectWithoutTitleAndUrl)
-      .expect(401)
+    await api.post('/api/blogs').send(blogObjectWithoutTitleAndUrl).expect(401)
 
     const blogsInDbAfterPostRequest = await helper.getBlogsInDb()
 
-    expect(blogsInDbAfterPostRequest).toHaveLength(helper.listWithManyBlogs.length)
+    expect(blogsInDbAfterPostRequest).toHaveLength(
+      helper.listWithManyBlogs.length
+    )
   })
 
   test('created blog has user property', async () => {
@@ -172,7 +183,6 @@ describe('POST /api/blogs request tests', () => {
     const returnedBlog = response.body
 
     expect(returnedBlog.user).toBeDefined()
-
   })
 })
 
@@ -184,16 +194,16 @@ describe('PUT api/blogs request tests', () => {
 
     const blogToBeUpdated = await _.first(blogsInDbBeforeUpdateRequest)
 
-    const updatedBlog = { ...blogToBeUpdated, likes: blogToBeUpdated.likes+1 }
+    const updatedBlog = { ...blogToBeUpdated, likes: blogToBeUpdated.likes + 1 }
 
-    await api
-      .put(`/api/blogs/${updatedBlog.id}`)
-      .send(updatedBlog)
+    await api.put(`/api/blogs/${updatedBlog.id}`).send(updatedBlog)
 
     const blogsInDbAfterUpdateRequest = await helper.getBlogsInDb()
-    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(blog => blog.id === updatedBlog.id)
+    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(
+      (blog) => blog.id === updatedBlog.id
+    )
 
-    expect(updatedBlogInDatabase.likes).toBe(blogToBeUpdated.likes+1)
+    expect(updatedBlogInDatabase.likes).toBe(blogToBeUpdated.likes + 1)
   })
 
   test('author of a blog can be modified', async () => {
@@ -204,12 +214,12 @@ describe('PUT api/blogs request tests', () => {
 
     const updatedBlog = { ...blogToBeUpdated, author: 'Modified Author' }
 
-    await api
-      .put(`/api/blogs/${updatedBlog.id}`)
-      .send(updatedBlog)
+    await api.put(`/api/blogs/${updatedBlog.id}`).send(updatedBlog)
 
     const blogsInDbAfterUpdateRequest = await helper.getBlogsInDb()
-    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(blog => blog.id === updatedBlog.id)
+    const updatedBlogInDatabase = blogsInDbAfterUpdateRequest.find(
+      (blog) => blog.id === updatedBlog.id
+    )
 
     expect(updatedBlogInDatabase.author).not.toBe(blogToBeUpdated.author)
     expect(updatedBlogInDatabase.author).toBe('Modified Author')
@@ -231,7 +241,7 @@ describe('Blog object tests', () => {
     const blogObjectWithoutLikes = {
       title: helper.individualBlog.title,
       author: helper.individualBlog.author,
-      url: helper.individualBlog.url
+      url: helper.individualBlog.url,
     }
 
     const loggedInUser = await helper.createUserAndEstablishItLoggedIn()
