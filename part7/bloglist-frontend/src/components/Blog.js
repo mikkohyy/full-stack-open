@@ -25,7 +25,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       likes: blog.likes + 1,
       title: blog.title,
       url: blog.url,
-      user: blog.user.id
+      user: blog.user.id,
     }
 
     updateBlog(likedBlog)
@@ -45,13 +45,21 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   return (
     <div className="blog" style={blogStyle}>
       <div className="blog-info">
-        &quot;{blog.title}&quot; by {blog.author} <Button text={buttonText} onClick={viewHideAdditionalInfo} />
+        &quot;{blog.title}&quot; by {blog.author}{' '}
+        <Button text={buttonText} onClick={viewHideAdditionalInfo} />
       </div>
-      <div className='additionalBlogInfo' style={showWhenVisible}>
-        <span className="blog-url">{blog.url}</span><br/>
-        <span className="blog-likes">{blog.likes} <Button text="like" onClick={addLikeToBlogAndUpdate} /><br/></span>
-        <span className="blog-creator-name">{blog.user.name}<br/></span>
-        <Button text="remove" onClick={removeThisBlog}/>
+      <div className="additionalBlogInfo" style={showWhenVisible}>
+        <span className="blog-url">{blog.url}</span>
+        <br />
+        <span className="blog-likes">
+          {blog.likes} <Button text="like" onClick={addLikeToBlogAndUpdate} />
+          <br />
+        </span>
+        <span className="blog-creator-name">
+          {blog.user.name}
+          <br />
+        </span>
+        <Button text="remove" onClick={removeThisBlog} />
       </div>
     </div>
   )
@@ -60,7 +68,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   updateBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired
+  removeBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

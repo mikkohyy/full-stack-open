@@ -12,8 +12,7 @@ const Notification = ({ successful, message }) => {
     borderStyle: 'solid',
     borderRadius: 5,
     padding: 5,
-    marginBottom: 10
-
+    marginBottom: 10,
   }
 
   return (

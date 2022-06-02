@@ -1,18 +1,18 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
 
     const user = {
       username: 'zerocool',
       name: 'Dade Murphy',
-      password: 'loocorez'
+      password: 'loocorez',
     }
     cy.request('POST', 'http://localhost:3003/api/users', user)
 
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('Log in to the application')
     cy.get('#login-form')
       .should('contain', 'username')
@@ -20,8 +20,8 @@ describe('Blog app', function() {
     cy.get('#login-button').should('contain', 'login')
   })
 
-  describe('Login', function() {
-    it('Succeeds with correct credentials', function() {
+  describe('Login', function () {
+    it('Succeeds with correct credentials', function () {
       cy.get('#login-input-username').type('zerocool')
       cy.get('#login-input-password').type('loocorez')
       cy.get('#login-button').click()
@@ -33,7 +33,7 @@ describe('Blog app', function() {
       cy.contains('create new')
     })
 
-    it('Fails with wrong credentials', function() {
+    it('Fails with wrong credentials', function () {
       cy.get('#login-input-username').type('zerocool')
       cy.get('#login-input-password').type('i-hack')
       cy.get('#login-button').click()
@@ -48,28 +48,33 @@ describe('Blog app', function() {
     })
   })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
+  describe('When logged in', function () {
+    beforeEach(function () {
       cy.login('zerocool', 'loocorez')
     })
 
-    it('A blog can be created', function() {
+    it('A blog can be created', function () {
       cy.contains('create new blog').click()
       cy.get('#title').type('React patterns')
       cy.get('#author').type('Michael Chan')
       cy.get('#url').type('https://reactpatterns.com/')
       cy.get('#create-button').click()
 
-      cy.get('.blog:first')
-        .should('contain', '"React patterns" by Michael Chan')
+      cy.get('.blog:first').should(
+        'contain',
+        '"React patterns" by Michael Chan'
+      )
 
       cy.get('.notification-field')
-        .should('contain', 'a new blog React patterns by Michael Chan was added')
+        .should(
+          'contain',
+          'a new blog React patterns by Michael Chan was added'
+        )
         .and('have.css', 'color', 'rgb(0, 128, 0)')
     })
 
-    describe('When a blog exists', function() {
-      beforeEach(function() {
+    describe('When a blog exists', function () {
+      beforeEach(function () {
         cy.contains('create new blog').click()
         cy.get('#title').type('React patterns')
         cy.get('#author').type('Michael Chan')
@@ -77,14 +82,14 @@ describe('Blog app', function() {
         cy.get('#create-button').click()
       })
 
-      it('User can add a like to a blog', function() {
+      it('User can add a like to a blog', function () {
         cy.contains('view').click()
         cy.get('.blog-likes:first').should('contain', '0')
         cy.contains('like').click()
         cy.get('.blog-likes:first').should('contain', '1')
       })
 
-      it('User can delete it', function() {
+      it('User can delete it', function () {
         cy.contains('view').click()
         cy.contains('remove').click()
 
@@ -94,11 +99,11 @@ describe('Blog app', function() {
         cy.contains('"React patterns" by Michael Chan').should('not.exist')
       })
 
-      it('Only user who has added the blog can delete it', function() {
+      it('Only user who has added the blog can delete it', function () {
         const user = {
           username: 'acidburn',
           name: 'Kate Libby',
-          password: 'nrubdica'
+          password: 'nrubdica',
         }
         cy.request('POST', 'http://localhost:3003/api/users', user)
         cy.contains('logout').click()
@@ -115,8 +120,8 @@ describe('Blog app', function() {
       })
     })
   })
-  describe('When many blogs', function() {
-    it('Blogs are printed in the right order', function() {
+  describe('When many blogs', function () {
+    it('Blogs are printed in the right order', function () {
       const rightBlogOrder = [
         'Canonical string reduction',
         'First class tests',
@@ -156,14 +161,14 @@ describe('Blog app', function() {
 
       cy.reload()
 
-      cy.get('.blog-info')
-        .then((blogs) => {
-          let visibleBlogs = Cypress._.map(blogs, (blog) => { return blog.innerHTML })
-          for (let i=0;i<rightBlogOrder.length;i++) {
-            expect(visibleBlogs[i]).to.contain(rightBlogOrder[i])
-          }
+      cy.get('.blog-info').then((blogs) => {
+        let visibleBlogs = Cypress._.map(blogs, (blog) => {
+          return blog.innerHTML
         })
-
+        for (let i = 0; i < rightBlogOrder.length; i++) {
+          expect(visibleBlogs[i]).to.contain(rightBlogOrder[i])
+        }
+      })
     })
   })
 })

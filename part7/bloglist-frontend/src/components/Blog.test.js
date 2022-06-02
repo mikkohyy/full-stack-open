@@ -11,9 +11,9 @@ const testBlog = {
   user: {
     username: 'acidburn',
     name: 'Kate Libby',
-    id: '61e44b8aa3e17777cf7fce8c'
+    id: '61e44b8aa3e17777cf7fce8c',
   },
-  id: '61e7094634ccc6bd2942d5ee'
+  id: '61e7094634ccc6bd2942d5ee',
 }
 
 test('first only renders the title and the author of the blog', () => {
@@ -21,7 +21,9 @@ test('first only renders the title and the author of the blog', () => {
     <Blog blog={testBlog} updateBlog={() => {}} removeBlog={() => {}} />
   )
 
-  const additionalInfo = renderedComponent.container.querySelector('.additionalBlogInfo')
+  const additionalInfo = renderedComponent.container.querySelector(
+    '.additionalBlogInfo'
+  )
   expect(additionalInfo).toHaveStyle('display: none')
 
   expect(renderedComponent.container).toHaveTextContent('view')
@@ -35,7 +37,9 @@ test('after clicking the view button url and number of likes are shown', () => {
   const additionalInfoButton = renderedComponent.getByText('view')
   fireEvent.click(additionalInfoButton)
 
-  const additionalInfo = renderedComponent.container.querySelector('.additionalBlogInfo')
+  const additionalInfo = renderedComponent.container.querySelector(
+    '.additionalBlogInfo'
+  )
   expect(additionalInfo).not.toHaveStyle('display: none')
 
   expect(renderedComponent.container).toHaveTextContent('hide')

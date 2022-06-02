@@ -10,9 +10,7 @@ test('calls the event handler with the right details when a new blog is created'
   const blogAuthor = 'Michael Chan'
   const blogUrl = 'https://reactpatterns.com/'
 
-  const renderedComponent = render(
-    <BlogForm createBlog={mockCreateHandler} />
-  )
+  const renderedComponent = render(<BlogForm createBlog={mockCreateHandler} />)
 
   const title = renderedComponent.container.querySelector('#title')
   const author = renderedComponent.container.querySelector('#author')
@@ -20,7 +18,7 @@ test('calls the event handler with the right details when a new blog is created'
   const form = renderedComponent.container.querySelector('#newBlogForm')
 
   fireEvent.change(title, {
-    target: { value: blogTitle }
+    target: { value: blogTitle },
   })
 
   fireEvent.change(author, {
@@ -28,7 +26,7 @@ test('calls the event handler with the right details when a new blog is created'
   })
 
   fireEvent.change(url, {
-    target: { value: blogUrl }
+    target: { value: blogUrl },
   })
 
   fireEvent.submit(form)
