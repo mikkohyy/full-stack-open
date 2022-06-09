@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import Button from './components/Button'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -7,6 +7,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+// import { useSelector } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -149,14 +150,11 @@ const App = () => {
           <BlogForm createBlog={handleCreateBlog} />
         </Togglable>
         <br />
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={handleUpdateBlog}
-            removeBlog={handleRemoveBlog}
-          />
-        ))}
+        <Blogs
+          blogs={blogs}
+          handleUpdateBlog={handleUpdateBlog}
+          handleRemoveBlog={handleRemoveBlog}
+        />
       </div>
     )
   }
