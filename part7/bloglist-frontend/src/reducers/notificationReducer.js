@@ -24,11 +24,7 @@ const notificationSlice = createSlice({
   },
 })
 
-export const setNotificationRedux = ({
-  successful,
-  message,
-  displaySeconds,
-}) => {
+export const setNotification = ({ successful, message, displaySeconds }) => {
   const displayTime = displaySeconds * 1000
   return (dispatch) => {
     dispatch(showNotification({ successful, message }))

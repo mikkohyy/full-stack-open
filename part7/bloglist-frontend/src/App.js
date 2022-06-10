@@ -8,7 +8,8 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
-import { setNotificationRedux } from './reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -16,6 +17,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [])
 
   useEffect(() => {
     blogService
@@ -33,22 +38,6 @@ const App = () => {
   }, [])
 
   const blogFormRef = useRef()
-
-  const handleCreateBlog = async (newBlog) => {
-    try {
-      const response = await blogService.create(newBlog)
-      const updatedBlogs = blogs.concat(response)
-      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-      notifyUser(
-        `a new blog ${response.title} by ${response.author} was added`,
-        true,
-        5
-      )
-      blogFormRef.current.toggleVisibility()
-    } catch (expection) {
-      notifyUser('adding the blog failed', false, 5)
-    }
-  }
 
   const handleRemoveBlog = async (blogToBeRemoved) => {
     try {
@@ -110,7 +99,7 @@ const App = () => {
 
   const notifyUser = (message, wasSuccessful, displaySeconds) => {
     dispatch(
-      setNotificationRedux({
+      setNotification({
         message: message,
         successful: wasSuccessful,
         displaySeconds: displaySeconds,
@@ -143,11 +132,10 @@ const App = () => {
         </p>
         <Togglable buttonLabel="create new blog" ref={blogFormRef}>
           <h2>create new</h2>
-          <BlogForm createBlog={handleCreateBlog} />
+          <BlogForm />
         </Togglable>
         <br />
         <Blogs
-          blogs={blogs}
           handleUpdateBlog={handleUpdateBlog}
           handleRemoveBlog={handleRemoveBlog}
         />
