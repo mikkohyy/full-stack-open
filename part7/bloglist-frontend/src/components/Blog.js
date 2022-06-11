@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import Button from './Button'
 import PropTypes from 'prop-types'
+import { removeBlog, updateBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlog, removeBlog }) => {
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -28,12 +32,12 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       user: blog.user.id,
     }
 
-    updateBlog(likedBlog)
+    dispatch(updateBlog(likedBlog))
   }
 
   const removeThisBlog = () => {
     if (window.confirm(`Remove blog ${blog.title} written by ${blog.author}`)) {
-      removeBlog(blog)
+      dispatch(removeBlog(blog))
     }
   }
 
@@ -67,8 +71,5 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
 }
-
 export default Blog

@@ -13,19 +13,12 @@ import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [])
-
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
   }, [])
 
   useEffect(() => {
@@ -38,23 +31,6 @@ const App = () => {
   }, [])
 
   const blogFormRef = useRef()
-
-  const handleRemoveBlog = async (blogToBeRemoved) => {
-    try {
-      await blogService.remove(blogToBeRemoved.id)
-      const updatedBlogs = blogs.filter(
-        (blog) => blog.id !== blogToBeRemoved.id
-      )
-      setBlogs(updatedBlogs)
-      notifyUser(
-        `Deleted ${blogToBeRemoved.title} by ${blogToBeRemoved.author}`,
-        true,
-        5
-      )
-    } catch (expection) {
-      notifyUser('Was not able to delete the blog', false, 5)
-    }
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -86,15 +62,6 @@ const App = () => {
     notifyUser(`logged out ${user.name}`, true, 5)
     setUser(null)
     blogService.setToken(null)
-  }
-
-  const handleUpdateBlog = async (updatedInfo) => {
-    const updatedBlog = await blogService.update(updatedInfo)
-    const updatedBlogs = blogs.map((blog) =>
-      blog.id !== updatedBlog.id ? blog : updatedBlog
-    )
-    const sortedUpdatedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
-    setBlogs(sortedUpdatedBlogs)
   }
 
   const notifyUser = (message, wasSuccessful, displaySeconds) => {
@@ -135,10 +102,7 @@ const App = () => {
           <BlogForm />
         </Togglable>
         <br />
-        <Blogs
-          handleUpdateBlog={handleUpdateBlog}
-          handleRemoveBlog={handleRemoveBlog}
-        />
+        <Blogs />
       </div>
     )
   }

@@ -14,10 +14,24 @@ const blogSlice = createSlice({
     appendBlogs(state, action) {
       state.push(action.payload)
     },
+    removeFromBlogs(state, action) {
+      const blogToBeRemovedId = action.payload
+      const updatedBlogs = state.filter((blog) => blog.id !== blogToBeRemovedId)
+      return updatedBlogs
+    },
+    replaceBlog(state, action) {
+      const updatedBlog = action.payload
+      const updatedBlogs = state.map((blog) =>
+        blog.id !== updatedBlog.id ? blog : updatedBlog
+      )
+      const sortedUpdatedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
+      return sortedUpdatedBlogs
+    },
   },
 })
 
-export const { setBlogs, appendBlogs } = blogSlice.actions
+export const { setBlogs, appendBlogs, removeFromBlogs, replaceBlog } =
+  blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -44,6 +58,47 @@ export const addBlog = (newBlog) => {
         setNotification({
           successful: false,
           message: 'adding the blog failed',
+          displaySeconds: 5,
+        })
+      )
+    }
+  }
+}
+
+export const removeBlog = (blogToBeRemoved) => {
+  return async (dispatch) => {
+    try {
+      await blogService.remove(blogToBeRemoved.id)
+      dispatch(removeFromBlogs(blogToBeRemoved.id))
+      dispatch(
+        setNotification({
+          successful: true,
+          message: `Deleted ${blogToBeRemoved.title} by ${blogToBeRemoved.author}`,
+          displaySeconds: 5,
+        })
+      )
+    } catch (exception) {
+      dispatch(
+        setNotification({
+          suffessful: false,
+          message: `Was not able to delete the blog ${blogToBeRemoved.title} by ${blogToBeRemoved.author}`,
+          displaySeconds: 5,
+        })
+      )
+    }
+  }
+}
+
+export const updateBlog = (updatedInfo) => {
+  return async (dispatch) => {
+    try {
+      const updatedBlog = await blogService.update(updatedInfo)
+      dispatch(replaceBlog(updatedBlog))
+    } catch (exception) {
+      dispatch(
+        setNotification({
+          suffessful: false,
+          message: 'Was not able to update the blog',
           displaySeconds: 5,
         })
       )
