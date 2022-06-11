@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Blogs from './components/Blogs'
+import React, { useState, useEffect } from 'react'
 import Button from './components/Button'
+import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
+import UsersView from './components/UsersView'
 import blogService from './services/blogs'
+import usersService from './services/users'
 import loginService from './services/login'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserStore, clearUserStore } from './reducers/userReducer'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,8 +31,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  const blogFormRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -62,6 +61,7 @@ const App = () => {
     dispatch(clearUserStore())
     notifyUser(`logged out ${user.name}`, true, 5)
     blogService.setToken(null)
+    usersService.setToken(null)
   }
 
   const notifyUser = (message, wasSuccessful, displaySeconds) => {
@@ -93,16 +93,16 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         <Notification />
+        <p>{`${user.name} logged in`}</p>
         <p>
-          {`${user.name} logged in`}{' '}
           <Button text="logout" onClick={handleLogout} />
         </p>
-        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-          <h2>create new</h2>
-          <BlogForm />
-        </Togglable>
-        <br />
-        <Blogs />
+        <Router>
+          <Routes>
+            <Route path="/" element={<BlogList />} />
+            <Route path="/users" element={<UsersView />} />
+          </Routes>
+        </Router>
       </div>
     )
   }
