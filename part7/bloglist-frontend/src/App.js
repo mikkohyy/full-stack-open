@@ -4,6 +4,7 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import UsersView from './components/UsersView'
+import UserBlogs from './components/UserBlogs'
 import blogService from './services/blogs'
 import usersService from './services/users'
 import loginService from './services/login'
@@ -101,6 +102,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/users" element={<UsersView />} />
+            <Route path="/users/:id" element={<UserBlogs />} />
           </Routes>
         </Router>
       </div>

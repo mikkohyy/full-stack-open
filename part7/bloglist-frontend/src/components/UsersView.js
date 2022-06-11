@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsersWithBlogN } from '../reducers/usersReducer'
@@ -23,7 +24,9 @@ const UsersView = () => {
         <tbody>
           {usersWithBlogsN.map((user) => (
             <tr key={user.name}>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </td>
               <td>{user.nOfBlogs}</td>
             </tr>
           ))}
