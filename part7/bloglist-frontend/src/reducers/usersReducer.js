@@ -19,10 +19,11 @@ export const getUsersWithBlogN = () => {
   return async (dispatch) => {
     const users = await usersService.getAll()
     const usersWithBlogN = users.map((user) => ({
-      user: user.name,
+      ...user,
       nOfBlogs: user.blogs.length,
     }))
-    dispatch(setUsers(usersWithBlogN))
+    const orderedUsers = usersWithBlogN.sort((a, b) => b.nOfBlogs - a.nOfBlogs)
+    dispatch(setUsers(orderedUsers))
   }
 }
 
