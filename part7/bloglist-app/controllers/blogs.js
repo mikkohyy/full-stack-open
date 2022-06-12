@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
 blogsRouter.delete(
@@ -14,6 +15,7 @@ blogsRouter.delete(
     }
 
     await Blog.findByIdAndRemove(request.params.id)
+    await Comment.deleteMany({ blog: request.params.id })
 
     user.blogs = user.blogs.filter(
       (blog) => blog.toString() !== request.params.id
@@ -61,20 +63,24 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
+  const commentIds = body.comments.map((comment) => comment.id)
+
   const blogToBeModified = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
     user: body.user,
-    comments: body.comments,
+    comments: commentIds,
   }
 
   const updatedBlog = await Blog.findByIdAndUpdate(
     request.params.id,
     blogToBeModified,
     { new: true }
-  ).populate('user', { username: 1, name: 1 })
+  )
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments')
 
   response.json(updatedBlog)
 })

@@ -1,7 +1,9 @@
 import React from 'react'
 import Button from './Button'
 import { removeBlog, updateBlog } from '../reducers/blogReducer'
+import BlogComments from './BlogComments'
 import { useDispatch } from 'react-redux'
+import BlogAddField from './CommentAddField'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -14,6 +16,7 @@ const Blog = ({ blog }) => {
       title: blog.title,
       url: blog.url,
       user: blog.user.id,
+      comments: blog.comments,
     }
 
     dispatch(updateBlog(likedBlog))
@@ -49,11 +52,8 @@ const Blog = ({ blog }) => {
       </span>
       <Button text="remove" onClick={removeThisBlog} />
       <h3>comments</h3>
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment.id}>{comment.text}</li>
-        ))}
-      </ul>
+      <BlogAddField blogId={blog.id} />
+      <BlogComments comments={blog.comments} />
     </div>
   )
 }

@@ -27,11 +27,25 @@ const blogSlice = createSlice({
       const sortedUpdatedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
       return sortedUpdatedBlogs
     },
+    addComment(state, action) {
+      const addedComment = action.payload
+      const updatedBlogs = state.map((blog) =>
+        blog.id !== addedComment.blog
+          ? blog
+          : { ...blog, comments: blog.comments.concat(addedComment) }
+      )
+      return updatedBlogs
+    },
   },
 })
 
-export const { setBlogs, appendBlogs, removeFromBlogs, replaceBlog } =
-  blogSlice.actions
+export const {
+  setBlogs,
+  appendBlogs,
+  removeFromBlogs,
+  replaceBlog,
+  addComment,
+} = blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
