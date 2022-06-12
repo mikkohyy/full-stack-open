@@ -5,20 +5,21 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import UsersView from './components/UsersView'
 import UserBlogs from './components/UserBlogs'
+import Blog from './components/Blog'
 import blogService from './services/blogs'
-import usersService from './services/users'
 import loginService from './services/login'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUserStore, clearUserStore } from './reducers/userReducer'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
   const user = useSelector((state) => state.user)
+  const blogs = useSelector((state) => state.blogs)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -32,6 +33,9 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const match = useMatch('blogs/:id')
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -62,7 +66,6 @@ const App = () => {
     dispatch(clearUserStore())
     notifyUser(`logged out ${user.name}`, true, 5)
     blogService.setToken(null)
-    usersService.setToken(null)
   }
 
   const notifyUser = (message, wasSuccessful, displaySeconds) => {
@@ -98,13 +101,12 @@ const App = () => {
         <p>
           <Button text="logout" onClick={handleLogout} />
         </p>
-        <Router>
-          <Routes>
-            <Route path="/" element={<BlogList />} />
-            <Route path="/users" element={<UsersView />} />
-            <Route path="/users/:id" element={<UserBlogs />} />
-          </Routes>
-        </Router>
+        <Routes>
+          <Route path="/" element={<BlogList />} />
+          <Route path="/blogs/:id" element={<Blog blog={blog} />} />
+          <Route path="/users" element={<UsersView />} />
+          <Route path="/users/:id" element={<UserBlogs />} />
+        </Routes>
       </div>
     )
   }

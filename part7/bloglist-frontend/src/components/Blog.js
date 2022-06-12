@@ -1,26 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from './Button'
-import PropTypes from 'prop-types'
 import { removeBlog, updateBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
-  const [viewText, setViewText] = useState(true)
-  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false)
-
-  const buttonText = viewText ? 'view' : 'hide'
-  const showWhenVisible = { display: showAdditionalInfo ? '' : 'none' }
 
   const addLikeToBlogAndUpdate = () => {
     const likedBlog = {
@@ -41,35 +25,31 @@ const Blog = ({ blog }) => {
     }
   }
 
-  const viewHideAdditionalInfo = () => {
-    setViewText(!viewText)
-    setShowAdditionalInfo(!showAdditionalInfo)
+  if (!blog) {
+    return null
   }
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div className="blog">
       <div className="blog-info">
-        &quot;{blog.title}&quot; by {blog.author}{' '}
-        <Button text={buttonText} onClick={viewHideAdditionalInfo} />
+        <h2>
+          &quot;{blog.title}&quot; by {blog.author}{' '}
+        </h2>
       </div>
-      <div className="additionalBlogInfo" style={showWhenVisible}>
-        <span className="blog-url">{blog.url}</span>
+      <span className="blog-url">{blog.url}</span>
+      <br />
+      <span className="blog-likes">
+        {blog.likes} likes{' '}
+        <Button text="like" onClick={addLikeToBlogAndUpdate} />
         <br />
-        <span className="blog-likes">
-          {blog.likes} <Button text="like" onClick={addLikeToBlogAndUpdate} />
-          <br />
-        </span>
-        <span className="blog-creator-name">
-          {blog.user.name}
-          <br />
-        </span>
-        <Button text="remove" onClick={removeThisBlog} />
-      </div>
+      </span>
+      <span className="blog-creator-name">
+        added by {blog.user.name}
+        <br />
+      </span>
+      <Button text="remove" onClick={removeThisBlog} />
     </div>
   )
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-}
 export default Blog

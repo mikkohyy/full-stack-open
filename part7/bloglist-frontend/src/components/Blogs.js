@@ -1,13 +1,25 @@
 import React from 'react'
-import Blog from './Blog'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-const Blogs = ({ handleUpdateBlog }) => {
+const Blogs = () => {
   const blogs = useSelector((state) => state.blogs)
+
+  const blogLinkStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderColor: 'darkgray',
+    borderWidth: 1,
+    marginBottom: 5,
+  }
+
   return (
     <div>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={handleUpdateBlog} />
+        <div style={blogLinkStyle} key={`${blog.title}`}>
+          <Link to={`blogs/${blog.id}`}>{blog.title}</Link>
+        </div>
       ))}
     </div>
   )
