@@ -48,6 +48,12 @@ const Blog = ({ blog }) => {
         <br />
       </span>
       <Button text="remove" onClick={removeThisBlog} />
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>{comment.text}</li>
+        ))}
+      </ul>
     </div>
   )
 }
