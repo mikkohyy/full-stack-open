@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import UsersView from './components/UsersView'
 import UserBlogs from './components/UserBlogs'
+import NavigationBar from './components/NavigationBar'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -95,9 +96,9 @@ const App = () => {
   } else {
     return (
       <div>
-        <h2>blogs</h2>
         <Notification />
-        <p>{`${user.name} logged in`}</p>
+        <NavigationBar />
+        <h2>blog app</h2>
         <p>
           <Button text="logout" onClick={handleLogout} />
         </p>
