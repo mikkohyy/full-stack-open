@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Button from './Button'
 import commentService from '../services/comments'
 import { addComment } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { TextField, Button } from '@mui/material'
 
 const CommentAddField = ({ blogId }) => {
   const [comment, setComment] = useState('')
@@ -26,8 +26,19 @@ const CommentAddField = ({ blogId }) => {
   return (
     <div>
       <form>
-        <input value={comment} onChange={handleCommentChange} />
-        <Button text="add comment" onClick={onClick} />
+        <div>
+          <TextField
+            value={comment}
+            onChange={handleCommentChange}
+            label="comment"
+            size="small"
+          />
+        </div>
+        <div>
+          <Button onClick={onClick} size="small" variant="outlined">
+            add comment
+          </Button>
+        </div>
       </form>
     </div>
   )

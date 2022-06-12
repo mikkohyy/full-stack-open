@@ -1,9 +1,14 @@
 import React from 'react'
-import Button from './Button'
+import { Button } from '@mui/material'
 import { removeBlog, updateBlog } from '../reducers/blogReducer'
 import BlogComments from './BlogComments'
 import { useDispatch } from 'react-redux'
 import BlogAddField from './CommentAddField'
+import styled from 'styled-components'
+
+const BlogInfoContainer = styled.div`
+  font-size: 1.2em;
+`
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -39,18 +44,28 @@ const Blog = ({ blog }) => {
           &quot;{blog.title}&quot; by {blog.author}{' '}
         </h2>
       </div>
-      <span className="blog-url">{blog.url}</span>
-      <br />
-      <span className="blog-likes">
-        {blog.likes} likes{' '}
-        <Button text="like" onClick={addLikeToBlogAndUpdate} />
+      <BlogInfoContainer>
+        <span className="blog-url">{blog.url}</span>
         <br />
-      </span>
-      <span className="blog-creator-name">
-        added by {blog.user.name}
-        <br />
-      </span>
-      <Button text="remove" onClick={removeThisBlog} />
+        <span className="blog-likes">
+          {blog.likes} likes{' '}
+          <Button
+            onClick={addLikeToBlogAndUpdate}
+            size="small"
+            variant="outlined"
+          >
+            like
+          </Button>
+          <br />
+        </span>
+        <span className="blog-creator-name">
+          added by {blog.user.name}
+          <br />
+        </span>
+        <Button onClick={removeThisBlog} size="small" variant="outlined">
+          remove
+        </Button>
+      </BlogInfoContainer>
       <h3>comments</h3>
       <BlogAddField blogId={blog.id} />
       <BlogComments comments={blog.comments} />

@@ -2,6 +2,21 @@ import { Link } from 'react-router-dom'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUsersWithBlogN } from '../reducers/usersReducer'
+import {
+  TableContainer,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+} from '@mui/material'
+import { styled } from '@mui/material/styles'
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}))
 
 const UsersView = () => {
   const dispatch = useDispatch()
@@ -12,27 +27,27 @@ const UsersView = () => {
   }, [])
 
   return (
-    <div>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
+    <TableContainer>
+      <h2>Created blogs</h2>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>User</TableCell>
+            <TableCell>blogs created</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {usersWithBlogsN.map((user) => (
-            <tr key={user.name}>
-              <td>
+            <StyledTableRow key={user.name}>
+              <TableCell>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>{user.nOfBlogs}</td>
-            </tr>
+              </TableCell>
+              <TableCell>{user.nOfBlogs}</TableCell>
+            </StyledTableRow>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

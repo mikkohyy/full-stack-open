@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { addBlog } from '../reducers/blogReducer'
+import { TextField, Button } from '@mui/material'
 
 const BlogForm = () => {
   const [author, setAuthor] = useState('')
@@ -28,45 +29,51 @@ const BlogForm = () => {
       title,
       url,
     }
-    dispatch(addBlog(newBlog))
+
     setAuthor('')
     setTitle('')
     setUrl('')
+    dispatch(addBlog(newBlog))
   }
 
   return (
     <form id="newBlogForm" onSubmit={addNewBlog}>
       <div>
-        title:{' '}
-        <input
+        <TextField
           id="title"
           type="text"
           value={title}
           name="Title"
           onChange={handleTitleChange}
+          label="title"
+          size="small"
         />
       </div>
       <div>
-        author:{' '}
-        <input
+        <TextField
           id="author"
           type="text"
           value={author}
           name="Author"
           onChange={handleAuthorChange}
+          label="author"
+          size="small"
         />
       </div>
       <div>
-        url:{' '}
-        <input
+        <TextField
           id="url"
           type="text"
           value={url}
           name="Url"
           onChange={handleUrlChange}
+          label="author"
+          size="small"
         />
       </div>
-      <button id="create-button">create</button>
+      <Button id="create-button" size="small" variant="outlined" type="submit">
+        create
+      </Button>
     </form>
   )
 }

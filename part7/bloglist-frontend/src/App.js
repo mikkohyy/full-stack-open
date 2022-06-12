@@ -1,5 +1,5 @@
+import { Container, Button } from '@mui/material'
 import React, { useState, useEffect } from 'react'
-import Button from './components/Button'
 import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -81,34 +81,45 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <h2>Log in to the application</h2>
-        <Notification />
-        <LoginForm
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-        />
-      </div>
+      <Container>
+        <div>
+          <h2>Log in to the application</h2>
+          <Notification />
+          <LoginForm
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+          />
+        </div>
+      </Container>
     )
   } else {
     return (
-      <div>
-        <Notification />
-        <NavigationBar />
-        <h2>blog app</h2>
-        <p>
-          <Button text="logout" onClick={handleLogout} />
-        </p>
-        <Routes>
-          <Route path="/" element={<BlogList />} />
-          <Route path="/blogs/:id" element={<Blog blog={blog} />} />
-          <Route path="/users" element={<UsersView />} />
-          <Route path="/users/:id" element={<UserBlogs />} />
-        </Routes>
-      </div>
+      <Container>
+        <div>
+          <Notification />
+          <NavigationBar />
+          <h2>blog app</h2>
+          <p>
+            <Button
+              text="logout"
+              onClick={handleLogout}
+              variant="outlined"
+              size="small"
+            >
+              logout
+            </Button>
+          </p>
+          <Routes>
+            <Route path="/" element={<BlogList />} />
+            <Route path="/blogs/:id" element={<Blog blog={blog} />} />
+            <Route path="/users" element={<UsersView />} />
+            <Route path="/users/:id" element={<UserBlogs />} />
+          </Routes>
+        </div>
+      </Container>
     )
   }
 }

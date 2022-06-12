@@ -1,4 +1,5 @@
 import React from 'react'
+import { TextField, Button } from '@mui/material'
 
 const LoginForm = ({
   username,
@@ -10,29 +11,35 @@ const LoginForm = ({
   return (
     <form id="login-form" onSubmit={handleLogin}>
       <div>
-        username
-        <input
+        <TextField
           id="login-input-username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
+          label="username"
         />
       </div>
       <div>
-        password
-        <input
+        <TextField
           id="login-input-password"
-          type="password"
           value={password}
+          type="password"
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
+          label="password"
         />
       </div>
       <div>
-        <button id="login-button" type="submit">
+        <Button
+          id="login-button"
+          variant="outlined"
+          color="primary"
+          type="submit"
+          size="small"
+        >
           login
-        </button>
+        </Button>
       </div>
     </form>
   )
