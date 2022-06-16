@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
 
+/*
 let authors = [
   {
     name: 'Robert Martin',
@@ -29,6 +30,7 @@ let authors = [
     id: 'afa5b6f3-344d-11e9-a414-719c6709cf3e',
   },
 ]
+*/
 
 /*
  * Suomi:
@@ -138,23 +140,39 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      let foundBooks = Array.from(books)
+    bookCount: async () => {
+      const booksN = await Book.collection.countDocuments()
+      return booksN
+    },
+    authorCount: async () => {
+      const authorN = await Author.collection.countDocuments()
+      return authorN
+    },
+    allBooks: async (root, args) => {
+      let foundBooks = null
+      let searchObject = {}
 
+      if (args.genre) {
+        searchObject = {
+          ...searchObject,
+          genres: args.genre,
+        }
+      }
+
+      foundBooks = await Book.find(searchObject)
+
+      /*
       if (args.author) {
         foundBooks = foundBooks.filter((book) => book.author === args.author)
       }
-      if (args.genre) {
-        foundBooks = foundBooks.filter((book) =>
-          book.genres.includes(args.genre)
-        )
-      }
+      */
 
       return foundBooks
     },
-    allAuthors: () => authors,
+    allAuthors: async () => {
+      const allAuthors = await Author.find({})
+      return allAuthors
+    },
   },
   Mutation: {
     addBook: async (root, args) => {
@@ -172,15 +190,11 @@ const resolvers = {
       const bookToBeAdded = new Book({ ...args, author: author })
       return bookToBeAdded.save()
     },
-    editAuthor: (root, args) => {
-      const oldAuthor = authors.find((author) => author.name === args.name)
-      if (!oldAuthor) {
-        return null
-      }
-
-      const updatedAuthor = { ...oldAuthor, born: args.setBornTo }
-      authors = authors.map((author) =>
-        author.name !== args.name ? author : updatedAuthor
+    editAuthor: async (root, args) => {
+      const updatedAuthor = await Author.findOneAndUpdate(
+        { name: args.name },
+        { born: args.setBornTo },
+        { new: true }
       )
       return updatedAuthor
     },
