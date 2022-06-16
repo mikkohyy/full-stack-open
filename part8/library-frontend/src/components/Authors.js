@@ -29,7 +29,9 @@ const Authors = (props) => {
             ))}
         </tbody>
       </table>
-      <ModifyBirthYear />
+      {!authors.loading && (
+        <ModifyBirthYear currentAuthors={authors.data.allAuthors} />
+      )}
     </div>
   )
 }
