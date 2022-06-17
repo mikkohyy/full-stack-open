@@ -179,7 +179,7 @@ const resolvers = {
         }
       }
 
-      foundBooks = await Book.find(searchObject)
+      foundBooks = await Book.find(searchObject).populate('author')
 
       /*
       if (args.author) {
@@ -276,7 +276,7 @@ const resolvers = {
     login: async (root, args) => {
       const user = await User.findOne({ username: args.username })
 
-      if (!user || args.password !== 'drowssap') {
+      if (!user || args.password !== 'password') {
         throw new UserInputError('Wrong credentials')
       }
 
