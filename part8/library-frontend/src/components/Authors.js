@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
 import ModifyBirthYear from './ModifyBirthYear'
 
-const Authors = (props) => {
+const Authors = ({ show, token }) => {
   const authors = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -29,7 +29,7 @@ const Authors = (props) => {
             ))}
         </tbody>
       </table>
-      {!authors.loading && (
+      {!authors.loading && token && (
         <ModifyBirthYear currentAuthors={authors.data.allAuthors} />
       )}
     </div>
