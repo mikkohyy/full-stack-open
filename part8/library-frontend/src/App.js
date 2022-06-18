@@ -3,6 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
+import RecommendView from './components/RecommendView'
 import { useApolloClient } from '@apollo/client'
 
 const App = () => {
@@ -28,6 +29,9 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
+        {token && (
+          <button onClick={() => setPage('recommend')}>recommend</button>
+        )}
         {token && <button onClick={() => setPage('add')}>add book</button>}
         {!token && <button onClick={() => setPage('login')}>login</button>}
         {token && <button onClick={logoutUser}>logout</button>}
@@ -44,6 +48,8 @@ const App = () => {
         setToken={setToken}
         setPage={setPage}
       />
+
+      <RecommendView show={page === 'recommend'} />
     </div>
   )
 }

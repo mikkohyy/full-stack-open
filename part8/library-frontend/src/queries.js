@@ -53,3 +53,11 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const USER_FAVOURITE_GENRE = gql`
+  query {
+    me {
+      favouriteGenre
+    }
+  }
+`
