@@ -49,7 +49,7 @@ const App = () => {
         setPage={setPage}
       />
 
-      <RecommendView show={page === 'recommend'} />
+      {token && <RecommendView show={page === 'recommend'} token={token} />}
     </div>
   )
 }

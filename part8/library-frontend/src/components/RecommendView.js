@@ -1,36 +1,46 @@
-import { useQuery } from '@apollo/client'
-import { USER_FAVOURITE_GENRE, ALL_BOOKS } from '../queries'
+import { useQuery, useLazyQuery } from '@apollo/client'
+import { USER_FAVOURITE_GENRE, ALL_BOOKS_IN_GENRE } from '../queries'
 import React, { useEffect, useState } from 'react'
 
-const RecommendView = ({ show }) => {
-  const userInfo = useQuery(USER_FAVOURITE_GENRE)
-  const books = useQuery(ALL_BOOKS)
-
+const RecommendView = ({ show, token }) => {
   const [recommendedBooks, setRecommendedBooks] = useState([])
+  const [favouriteGenre, setFavouriteGenre] = useState('')
+
+  const userInfo = useQuery(USER_FAVOURITE_GENRE)
+  const [getBooks, books] = useLazyQuery(ALL_BOOKS_IN_GENRE, {
+    variables: { genre: favouriteGenre },
+  })
 
   useEffect(() => {
-    if (!userInfo.loading && !books.loading) {
-      const loadedBooks = books.data.allBooks
-      const userFavouriteGenre = userInfo.data.me.favouriteGenre
+    if (!userInfo.loading) {
+      setFavouriteGenre(userInfo.data.me.favouriteGenre)
+    }
+  }, [userInfo])
 
-      setRecommendedBooks(() => {
-        const booksInGenre = loadedBooks.filter((book) =>
-          book.genres.includes(userFavouriteGenre)
-        )
-        return booksInGenre
+  useEffect(() => {
+    if (!userInfo.loading && favouriteGenre !== '') {
+      getBooks({
+        variables: { genre: favouriteGenre },
       })
     }
-  }, [books, userInfo])
+  }, [userInfo, getBooks, favouriteGenre])
+
+  useEffect(() => {
+    if (!userInfo.loading && !books.loading && books.data) {
+      setRecommendedBooks(books.data.allBooks)
+    }
+  }, [userInfo, books])
 
   if (!show) {
     return null
   }
+
   return (
     <div>
       <h2>recommendations</h2>
       {!books.loading && !userInfo.loading && (
         <div>
-          books in your favourite genre <b>{userInfo.data.me.favouriteGenre}</b>
+          books in your favourite genre <b>{favouriteGenre}</b>
         </div>
       )}
       <table>
