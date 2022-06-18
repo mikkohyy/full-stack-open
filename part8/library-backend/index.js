@@ -161,15 +161,12 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     bookCount: async () => {
-      const booksN = await Book.collection.countDocuments()
-      return booksN
+      return Book.collection.countDocuments()
     },
     authorCount: async () => {
-      const authorN = await Author.collection.countDocuments()
-      return authorN
+      return Author.collection.countDocuments()
     },
     allBooks: async (root, args) => {
-      let foundBooks = null
       let searchObject = {}
 
       if (args.genre) {
@@ -179,19 +176,16 @@ const resolvers = {
         }
       }
 
-      foundBooks = await Book.find(searchObject).populate('author')
-
       /*
       if (args.author) {
         foundBooks = foundBooks.filter((book) => book.author === args.author)
       }
       */
 
-      return foundBooks
+      return Book.find(searchObject).populate('author')
     },
     allAuthors: async () => {
-      const allAuthors = await Author.find({})
-      return allAuthors
+      return Author.find({})
     },
     me: (root, args, context) => {
       const currentUser = context.currentUser
