@@ -14,7 +14,7 @@ const Books = (props) => {
       const booksData = books.data.allBooks
       setGenres((genres) => {
         const genreData = booksData.map((book) => book.genres).flat()
-        const uniqueGenres = [...new Set(genreData)]
+        const uniqueGenres = ['all genres', ...new Set(genreData)]
         return uniqueGenres
       })
     }
