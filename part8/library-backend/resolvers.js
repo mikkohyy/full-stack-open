@@ -33,6 +33,7 @@ const resolvers = {
       return Book.find(searchObject).populate('author')
     },
     allAuthors: async () => {
+      console.log('allAuthors')
       return Author.find({})
     },
     me: (root, args, context) => {
@@ -60,16 +61,20 @@ const resolvers = {
           name: args.author,
           bookCount: 1,
           born: null,
+          books: [],
         })
       }
 
       const bookToBeAdded = new Book({ ...args, author: author })
 
+      const updatedBooks = author.books.concat(bookToBeAdded._id)
+
       try {
         await author.validate()
         await bookToBeAdded.validate()
-        await author.save()
         await bookToBeAdded.save()
+        author.set({ books: updatedBooks })
+        await author.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
@@ -137,10 +142,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: () => {
-      // tässä oli (root)
-      // books.filter((book) => book.author === root.name).length,
-      return 0
+    bookCount: (root) => {
+      return root.books.length
     },
   },
   Subscription: {

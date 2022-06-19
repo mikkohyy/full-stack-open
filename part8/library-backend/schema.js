@@ -21,6 +21,7 @@ const typeDefs = gql`
     name: String!
     bookCount: Int!
     born: Int
+    books: [Book!]
   }
 
   type Mutation {
