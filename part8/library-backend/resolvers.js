@@ -33,7 +33,6 @@ const resolvers = {
       return Book.find(searchObject).populate('author')
     },
     allAuthors: async () => {
-      console.log('allAuthors')
       return Author.find({})
     },
     me: (root, args, context) => {
