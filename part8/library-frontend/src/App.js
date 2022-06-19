@@ -13,10 +13,16 @@ const App = () => {
   const client = useApolloClient()
 
   const logoutUser = () => {
-    setToken(null)
     localStorage.clear()
-    client.resetStore()
+    setToken(null)
   }
+
+  useEffect(() => {
+    const tokenInStorage = window.localStorage.getItem('library-user-token')
+    if (!token && !tokenInStorage) {
+      client.resetStore()
+    }
+  }, [token, client])
 
   useEffect(() => {
     const tokenInStorage = window.localStorage.getItem('library-user-token')
