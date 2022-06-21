@@ -20,14 +20,14 @@ const parseExerciseData = (args: Array<string>):ExerciseData => {
   const data = args.slice(2);
 
   if (data.some((dataPoint) => isNaN(Number(dataPoint)))) {
-    throw Error('All values that were given were not numbers')
+    throw Error('All values that were given were not numbers');
   }
 
   const target = Number(data[0]);
   const days = data.slice(1).map(dataPoint => Number(dataPoint));
 
-  return { target, days }
-}
+  return { target, days };
+};
 
 const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary => {
   const averageTrainingTime = getAverageTime(days);
@@ -41,25 +41,25 @@ const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary 
     ratingDescription: getRatingDescription(rating),
     target: goal,
     average: getAverageTime(days)
-  }
+  };
 
   return summary;
-}
+};
 
 const getPeriodLength = (days: Array<number>): number => {
   return days.length;
-}
+};
 
 const getTrainingDays = (days: Array<number>): number => {
   const daysWithTraining: Array<number> = days.filter(day => day !== 0);
   return daysWithTraining.length;
-}
+};
 
 const getWasSuccessful = (averageTrainingTime: number, goal: number): boolean => {
   const successful: boolean = averageTrainingTime > goal ? true : false;
 
   return successful;
-}
+};
 
 const getAverageTime = (days: Array<number>): number => {
   const sumOfTrainingTime: number = days
@@ -68,7 +68,7 @@ const getAverageTime = (days: Array<number>): number => {
   const averageTrainingTime: number = sumOfTrainingTime / daysInInterval;
   
   return averageTrainingTime;
-}
+};
 
 const calculateRating = (averageTrainingTime: number, goal: number): Rating => {
   let rating: Rating = -1;
@@ -81,7 +81,7 @@ const calculateRating = (averageTrainingTime: number, goal: number): Rating => {
   }
 
   return rating;
-}
+};
 
 const getRatingDescription = (rating: Rating): string => {
   let description = '';
@@ -93,11 +93,11 @@ const getRatingDescription = (rating: Rating): string => {
   } else if (rating === 1) {
     description = 'maybe it was raining all week. lets try again next week!';
   } else {
-    description = 'something went wrong'
+    description = 'something went wrong';
   }
 
-  return description
-}
+  return description;
+};
 
 try {
   const { target, days } = parseExerciseData(process.argv);
@@ -107,5 +107,5 @@ try {
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }
