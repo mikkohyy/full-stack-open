@@ -1,3 +1,8 @@
+interface ExerciseData {
+  target: number,
+  days: Array<number>
+}
+
 interface ExerciseSummary {
   periodLength: number,
   trainingDays: number,
@@ -9,6 +14,20 @@ interface ExerciseSummary {
 }
 
 type Rating = -1 | 1 | 2 | 3;
+
+const parseExerciseData = (args: Array<string>):ExerciseData => {
+  if (args.length < 4) throw Error('Not enough arguments');
+  const data = args.slice(2);
+
+  if (data.some((dataPoint) => isNaN(Number(dataPoint)))) {
+    throw Error('All values that were given were not numbers')
+  }
+
+  const target = Number(data[0]);
+  const days = data.slice(1).map(dataPoint => Number(dataPoint));
+
+  return { target, days }
+}
 
 const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary => {
   const averageTrainingTime = getAverageTime(days, goal);
@@ -80,4 +99,13 @@ const getRatingDescription = (rating: Rating): string => {
   return description
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+  const { target, days } = parseExerciseData(process.argv);
+  console.log(calculateExercises(days, target));
+} catch (error: unknown) {
+  let errorMessage = 'Something went wrong.';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage)
+}
