@@ -8,6 +8,8 @@ interface ExerciseSummary {
   average: number
 }
 
+type Rating = -1 | 1 | 2 | 3;
+
 const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary => {
   const averageTrainingTime = getAverageTime(days, goal);
   const rating = calculateRating(averageTrainingTime, goal);
@@ -49,8 +51,8 @@ const getAverageTime = (days: Array<number>, goal: number): number => {
   return averageTrainingTime;
 }
 
-const calculateRating = (averageTrainingTime: number, goal: number): number => {
-  let rating: number = 0;
+const calculateRating = (averageTrainingTime: number, goal: number): Rating => {
+  let rating: Rating = -1;
   if (averageTrainingTime >= (goal * 1.5)) {
     rating = 3;
   } else if (averageTrainingTime >= (goal * 0.5)) {
@@ -62,7 +64,7 @@ const calculateRating = (averageTrainingTime: number, goal: number): number => {
   return rating;
 }
 
-const getRatingDescription = (rating: number): string => {
+const getRatingDescription = (rating: Rating): string => {
   let description = '';
 
   if (rating === 3) {
@@ -71,6 +73,8 @@ const getRatingDescription = (rating: number): string => {
     description = 'good, but could be better!';
   } else if (rating === 1) {
     description = 'maybe it was raining all week. lets try again next week!';
+  } else {
+    description = 'something went wrong'
   }
 
   return description
