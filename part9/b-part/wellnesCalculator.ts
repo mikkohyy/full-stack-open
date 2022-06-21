@@ -1,8 +1,3 @@
-interface ExerciseData {
-  target: number,
-  days: Array<number>
-}
-
 interface ExerciseSummary {
   periodLength: number,
   trainingDays: number,
@@ -14,20 +9,6 @@ interface ExerciseSummary {
 }
 
 type Rating = -1 | 1 | 2 | 3;
-
-const parseExerciseData = (args: Array<string>):ExerciseData => {
-  if (args.length < 4) throw Error('Not enough arguments');
-  const data = args.slice(2);
-
-  if (data.some((dataPoint) => isNaN(Number(dataPoint)))) {
-    throw Error('All values that were given were not numbers');
-  }
-
-  const target = Number(data[0]);
-  const days = data.slice(1).map(dataPoint => Number(dataPoint));
-
-  return { target, days };
-};
 
 export const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary => {
   const averageTrainingTime = getAverageTime(days);
@@ -44,6 +25,31 @@ export const calculateExercises = (days: Array<number>, goal: number): ExerciseS
   };
 
   return summary;
+};
+
+export const calculateBMI = (height: number, weight: number): string => {
+  const bmi: number = weight / Math.pow(height / 100, 2);
+  let personBMI = 'Unknown';
+
+  if (bmi < 16) {
+    personBMI = 'Underweight (several thinness)';
+  } else if (bmi < 17) {
+    personBMI = 'Underweight (moderate thinness)';
+  } else if (bmi < 18.5) {
+    personBMI = 'Underweight (mild thinness)';
+  } else if (bmi < 25) {
+    personBMI = 'Normal (healthy weight)';
+  } else if (bmi < 30) {
+    personBMI = 'Overweight (pre-obese)';
+  } else if (bmi < 35) {
+    personBMI = 'Obese (class i)';
+  } else if (bmi < 40) {
+    personBMI = 'Obese (class ii)';
+  } else if (bmi >= 40) {
+    personBMI = 'Obese (class iii)';
+  }
+ 
+  return personBMI;
 };
 
 const getPeriodLength = (days: Array<number>): number => {
@@ -98,16 +104,3 @@ const getRatingDescription = (rating: Rating): string => {
 
   return description;
 };
-
-/*
-try {
-  const { target, days } = parseExerciseData(process.argv);
-  console.log(calculateExercises(days, target));
-} catch (error: unknown) {
-  let errorMessage = 'Something went wrong.';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage);
-}
-*/
