@@ -30,7 +30,7 @@ const parseExerciseData = (args: Array<string>):ExerciseData => {
 }
 
 const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary => {
-  const averageTrainingTime = getAverageTime(days, goal);
+  const averageTrainingTime = getAverageTime(days);
   const rating = calculateRating(averageTrainingTime, goal);
   
   const summary = {
@@ -40,7 +40,7 @@ const calculateExercises = (days: Array<number>, goal: number): ExerciseSummary 
     rating: rating,
     ratingDescription: getRatingDescription(rating),
     target: goal,
-    average: getAverageTime(days, goal)
+    average: getAverageTime(days)
   }
 
   return summary;
@@ -61,7 +61,7 @@ const getWasSuccessful = (averageTrainingTime: number, goal: number): boolean =>
   return successful;
 }
 
-const getAverageTime = (days: Array<number>, goal: number): number => {
+const getAverageTime = (days: Array<number>): number => {
   const sumOfTrainingTime: number = days
     .reduce((previousDay, currentDay) => previousDay + currentDay, 0);
   const daysInInterval: number = days.length;
