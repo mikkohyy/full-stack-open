@@ -1,4 +1,5 @@
 import diagnosesRouter from './routers/diagnoses';
+import patientsRouter from './routers/patients';
 import cors = require('cors');
 import express from 'express';
 const app = express();
@@ -12,8 +13,9 @@ app.get('/api/ping', (_req, res) => {
   res.send('pong');
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 app.use('/api/diagnoses', diagnosesRouter);
+
+app.use('/api/patients', patientsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
