@@ -17,10 +17,9 @@ const parseHeightWeight = (args: Array<string>): BmiParameters => {
   }
 }
 
-const calculateBMI = (height: number, weight: number): string => {
+export const calculateBMI = (height: number, weight: number): string => {
   const bmi: number = weight / Math.pow(height / 100, 2);
   let personBMI: string = '';
-
 
   if (bmi < 16) {
     personBMI = 'Underweight (several thinness)';
@@ -42,7 +41,6 @@ const calculateBMI = (height: number, weight: number): string => {
  
   return personBMI;
 }
-
 
 try {
   const { height, weight } = parseHeightWeight(process.argv);
