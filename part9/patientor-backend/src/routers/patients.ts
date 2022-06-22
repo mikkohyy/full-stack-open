@@ -13,7 +13,10 @@ router.get('/', (_req, res) => {
 router.post('/', (req, res) => {
   try {
     /* The following line caused problems. By searching the Dischord channel, I found out that
-       this is (probably?) caused by the newer versions of eslint. Hence, I disabled the line. */
+       this is (probably?) caused by the newer versions of eslint. Hence, I disabled the line. 
+       Tested it myself by downgrading eslint-plugin & parser to 4.x.x versions
+       (I have 5.x.x versions). It fixed the problem. Hence, I think it is fair to
+       ignore the line. */
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const newPatient = toNewPatient(req.body);
