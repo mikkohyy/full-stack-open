@@ -6,6 +6,7 @@ import toNewPatient from '../newPatientParser';
 const patients: Patient[] = patientsData.map(patient => {
   const newPatient = toNewPatient(patient as NewPatient) as Patient;
   newPatient.id = patient.id;
+  newPatient.entries = [];
   return newPatient;
 });
 
@@ -30,11 +31,14 @@ const addPatient = (entry: NewPatient): PatientWithoutSensitiveInfo => {
   const id: string = uuid();
   
   const addedPatient: Patient = {
-    ...entry, 
+    ...entry,
+    entries: [],
     id
   };
 
   patients.push(addedPatient);
+
+  console.log(patients);
 
   const newPatientWithoutSensitiveInfo: PatientWithoutSensitiveInfo = {
     name: addedPatient.name,
@@ -47,8 +51,14 @@ const addPatient = (entry: NewPatient): PatientWithoutSensitiveInfo => {
   return newPatientWithoutSensitiveInfo;
 };
 
+const findPatientById = ((id: string): Patient => {
+  const foundPatient = patients.find(patient => patient.id === id) as Patient;
+  return foundPatient;  
+});
+
 export default {
   getPatientData,
   getPatientsWithoutSensitiveInfo,
-  addPatient
+  addPatient,
+  findPatientById
 };
