@@ -5,7 +5,14 @@ import Part from './Part';
 const Content = ({courses}: {courses: Array<CoursePart>}) => {
   return(
     <div>
-      {courses.map(course => <Part key={course.name} coursePart={course} />)}
+      {courses.map(course => {return (
+        <div key={course.name}>
+          <b>{course.name} {course.exerciseCount}</b>
+          <Part key={`${course.name}-${course.exerciseCount}`} coursePart={course} />
+          <br />
+        </div>
+      );
+    })}
     </div>
   );
 };
