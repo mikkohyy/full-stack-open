@@ -1,12 +1,12 @@
 import React from 'react';
-import { CourseInfo } from '../types';
+import { CoursePart } from '../types';
 
-const Total = ({ courses }: { courses: CourseInfo[] }) => {
+const Total = ({ courses }: { courses: CoursePart[] }) => {
   return(
     <div>
       <p>
         Number of exercises{" "}
-        {courses.reduce((carry:number, part: CourseInfo) => carry + part.exerciseCount, 0)}
+        {courses.reduce((carry:number, part: CoursePart) => carry + part.exerciseCount, 0)}
       </p>
   </div>
   );
