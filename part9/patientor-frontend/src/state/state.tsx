@@ -20,7 +20,7 @@ type StateProviderProps = {
   reducer: React.Reducer<State, Action>;
   children: React.ReactElement;
 };
-
+ 
 export const StateProvider = ({
   reducer,
   children

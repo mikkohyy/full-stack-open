@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container } from "@material-ui/core";
+import PatientDetails from './components/PatientDetails';
 
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
@@ -41,6 +42,7 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage />} />
+            <Route path="/patients/:id" element={<PatientDetails />} />
           </Routes>
         </Container>
       </Router>
