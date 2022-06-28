@@ -7,6 +7,7 @@ import { useStateValue } from "../state";
 import { Typography } from "@material-ui/core";
 import { mdiGenderFemale, mdiGenderMale, mdiGenderTransgender } from "@mdi/js";
 import Icon from "@mdi/react";
+import { updatePatient } from '../state/reducer';
 
 const PatientDetails = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -26,17 +27,14 @@ const PatientDetails = () => {
 
   React.useEffect(() => {
     const fetchDetails = async () => {
-      console.log(patients);
       try {
         if (id && patients[id]) {
           const currentPatient = patients[id];
           if (currentPatient.ssn && currentPatient.entries) {
-            console.log('we already have the info', patients[id].name);
-            setPatient(currentPatient); 
+            setPatient(currentPatient);
           } else {
-            console.log('sent an request for ', patients[id].name);
             const { data: foundPatient } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
-            dispatch({ type: "UPDATE_PATIENT", payload: foundPatient });
+            dispatch(updatePatient(foundPatient));
             setPatient(foundPatient);
           }
         }
