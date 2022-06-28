@@ -38,8 +38,6 @@ const addPatient = (entry: NewPatient): PatientWithoutSensitiveInfo => {
 
   patients.push(addedPatient);
 
-  console.log(patients);
-
   const newPatientWithoutSensitiveInfo: PatientWithoutSensitiveInfo = {
     name: addedPatient.name,
     dateOfBirth: addedPatient.dateOfBirth,
