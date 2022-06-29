@@ -10,7 +10,7 @@ import Icon from "@mdi/react";
 import { updatePatient } from '../state/reducer';
 
 const PatientDetails = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{id: string}>();
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
 
@@ -91,7 +91,10 @@ const PatientDetails = () => {
             {entry.diagnosisCodes !== undefined &&
               <ul>
                 {entry.diagnosisCodes
-                  .map((code) => <li key={`${entry.id}-${code}`}>{code}</li>)}
+                  .map((code) => 
+                    <li key={`${entry.id}-${code}`}>
+                      {code}{' '}{diagnoses[code].name}
+                    </li>)}
               </ul>
             }
           </div>

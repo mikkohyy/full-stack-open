@@ -6,8 +6,8 @@ import PatientDetails from './components/PatientDetails';
 
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
-import { Patient } from "./types";
-import { setPatientList } from './state/reducer';
+import { Patient, Diagnosis } from "./types";
+import { setPatientList, setDiagnosisList } from './state/reducer';
 
 import PatientListPage from "./PatientListPage";
 import { Typography } from "@material-ui/core";
@@ -27,7 +27,20 @@ const App = () => {
         console.error(e);
       }
     };
+
+    const fetchDiagnosisList = async () => {
+      try {
+        const { data: diagnosisListFromApi } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+        dispatch(setDiagnosisList(diagnosisListFromApi));
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     void fetchPatientList();
+    void fetchDiagnosisList();
   }, [dispatch]);
 
   return (
