@@ -9,7 +9,6 @@ export type Entry =
   | HospitalEntry
   | HealthCheckEntry;
 
-
 interface BaseEntry {
   id: string;
   description: string;
