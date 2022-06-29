@@ -70,28 +70,34 @@ const isDate = (date: string): boolean => {
 };
 
 const isMedicalEntries = (entries: unknown[]): entries is Entry[] => {
-  const allowedTypes = ['HealthCheck', 'OccupationalHealthcare', 'Hospital'];
 
   if (entries.length === 0) {
     return true;
   }
 
   for (const entry of entries) {
-    if (typeof entry !== 'object' || entry === null || !('type' in entry)) {
-      return false;
-    }
-    
-    if ((entry as Entry).type === undefined) {
-      return false;
-    }
-
-    const e = entry as Entry;
-
-    if (typeof e.type !== 'string' || !allowedTypes.includes(e.type)) {
+    if (!isMedicalEntry(entry)) {
       return false;
     }
   }
 
+  return true;
+};
+
+const isMedicalEntry = (entry: unknown): entry is Entry => {
+  const allowedTypes = ['HealthCheck', 'OccupationalHealthcare', 'Hospital'];
+
+  if (typeof entry !== 'object' || entry === null || !('type' in entry)) {
+    return false;
+  }
+  
+  if ((entry as Entry).type === undefined) {
+    return false;
+  }
+
+  if (typeof (entry as Entry).type !== 'string' || !allowedTypes.includes((entry as Entry).type)) {
+    return false;
+  }
   return true;
 };
 
