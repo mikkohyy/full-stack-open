@@ -67,12 +67,35 @@ const PatientDetails = () => {
         {' '}
         <Icon
           title={`Patient's gender is ${patient.gender}`}
-          size="1em"
           path={getGenderIcon(patient.gender)}
+          size="1em"
         /> 
       </Typography>
       ssh: {patient.ssn}<br />
       occupation: {patient.occupation}
+      <Typography
+        variant="h6"
+        style={{
+          marginBottom: "0.5em",
+          marginTop: "0.5em",
+          fontWeight: "bold"
+        }}
+      >
+        entries
+      </Typography>
+      {patient.entries !== undefined && 
+       patient.entries
+       .map(entry =>
+          <div key={entry.id}>
+            {entry.date}{' '}<em>{entry.description}</em>
+            {entry.diagnosisCodes !== undefined &&
+              <ul>
+                {entry.diagnosisCodes
+                  .map((code) => <li key={`${entry.id}-${code}`}>{code}</li>)}
+              </ul>
+            }
+          </div>
+        )}
     </div>
   );
 };
