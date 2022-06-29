@@ -70,7 +70,6 @@ const isDate = (date: string): boolean => {
 };
 
 const isMedicalEntries = (entries: unknown[]): entries is Entry[] => {
-
   if (entries.length === 0) {
     return true;
   }

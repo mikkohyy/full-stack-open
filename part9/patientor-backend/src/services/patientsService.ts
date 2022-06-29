@@ -32,7 +32,6 @@ const addPatient = (entry: NewPatient): PatientWithoutSensitiveInfo => {
   
   const addedPatient: Patient = {
     ...entry,
-    entries: [],
     id
   };
 

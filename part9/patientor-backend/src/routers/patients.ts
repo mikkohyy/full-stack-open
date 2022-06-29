@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
        ignore the line. */
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const newPatient = toNewPatient(req.body);
+    const newPatient = toNewPatient( {...req.body, entries: [] });
     const addedPatient: PatientWithoutSensitiveInfo = patientsService
       .addPatient(newPatient);
       res.send(addedPatient);
