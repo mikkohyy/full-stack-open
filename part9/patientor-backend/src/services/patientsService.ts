@@ -6,7 +6,7 @@ import toNewPatient from '../newPatientParser';
 const patients: Patient[] = patientsData.map(patient => {
   const newPatient = toNewPatient(patient as NewPatient) as Patient;
   newPatient.id = patient.id;
-  newPatient.entries = [];
+  newPatient.entries = patient.entries || [];
   return newPatient;
 });
 

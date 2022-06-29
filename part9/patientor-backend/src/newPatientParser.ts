@@ -1,6 +1,6 @@
-import { NewPatient, NewPatientFields, Gender } from './types';
+import { NewPatient, NewPatientFields, Gender, Entry } from './types';
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation} : NewPatientFields): 
+const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries } : NewPatientFields): 
   NewPatient => {
   const newPatientToAdd: NewPatient = {
     name: parseName(name),
@@ -8,9 +8,18 @@ const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation} : NewPatient
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    entries: parseEntries(entries),
   };
 
   return newPatientToAdd;
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!entries || !Array.isArray(entries) || !isMedicalEntries(entries)) {
+    throw new Error(`Incorrect or missing information on patient's entries: ${entries}`);
+  }
+
+  return entries;
 };
 
 const parseName = (name: unknown): string => {
@@ -58,6 +67,32 @@ const isSsn = (ssn: string): boolean => {
 
 const isDate = (date: string): boolean => {
   return /\d{4}-\d{2}-\d{2}/.test(date);
+};
+
+const isMedicalEntries = (entries: unknown[]): entries is Entry[] => {
+  const allowedTypes = ['HealthCheck', 'OccupationalHealthcare', 'Hospital'];
+
+  if (entries.length === 0) {
+    return true;
+  }
+
+  for (const entry of entries) {
+    if (typeof entry !== 'object' || entry === null || !('type' in entry)) {
+      return false;
+    }
+    
+    if ((entry as Entry).type === undefined) {
+      return false;
+    }
+
+    const e = entry as Entry;
+
+    if (typeof e.type !== 'string' || !allowedTypes.includes(e.type)) {
+      return false;
+    }
+  }
+
+  return true;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
