@@ -1,6 +1,6 @@
-import { NewPatient, NewPatientFields, Gender, Entry } from './types';
+import { NewPatient, Gender, Entry } from '../types';
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries } : NewPatientFields): 
+const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, entries } : NewPatient): 
   NewPatient => {
   const newPatientToAdd: NewPatient = {
     name: parseName(name),

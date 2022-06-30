@@ -1,7 +1,8 @@
 import express from 'express';
 import patientsService from '../services/patientsService';
 import { PatientWithoutSensitiveInfo } from '../types';
-import toNewPatient from '../newPatientParser';
+import toNewPatient from '../utils/newPatientParser';
+import toNewEntry from '../utils/newEntryParser';
 
 const router = express.Router();
 
@@ -37,6 +38,15 @@ router.get('/:id', (req, res) => {
   const patientId: string = req.params.id;
   const foundPatient = patientsService.findPatientById(patientId);
   res.json(foundPatient);
+});
+
+router.post('/:id/entries', (req, res) => {
+  /* Same disclamer here for disabling a line as with the post request for patient */
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const newEntry = toNewEntry(req.body);
+  const patientId: string = req.params.id;
+  const updatedPatient = patientsService.addEntryToPatient(patientId, newEntry);
+  res.json(updatedPatient);
 });
 
 export default router;
