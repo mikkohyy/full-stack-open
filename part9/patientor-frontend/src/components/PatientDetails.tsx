@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Patient } from "../types";
+import { Patient, Gender } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
@@ -8,20 +8,24 @@ import { Typography } from "@material-ui/core";
 import { mdiGenderFemale, mdiGenderMale, mdiGenderTransgender } from "@mdi/js";
 import Icon from "@mdi/react";
 import { updatePatient } from '../state/reducer';
+import PatientEntry from './PatientEntry';
+import { assertNever } from '../helpers';
 
 const PatientDetails = () => {
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const { id } = useParams<{id: string}>();
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
 
-  const getGenderIcon = (gender: string): string => {
+  const getGenderIcon = (gender: Gender): string => {
     switch(gender) {
-      case 'female':
+      case Gender.Female:
         return mdiGenderFemale;
-      case 'male':
+      case Gender.Male:
         return mdiGenderMale;
-      default:  
+      case Gender.Other:
         return mdiGenderTransgender;
+      default:
+        return assertNever(gender);
     } 
   };
 
@@ -85,20 +89,7 @@ const PatientDetails = () => {
       </Typography>
       {patient.entries !== undefined && 
        patient.entries
-       .map(entry =>
-          <div key={entry.id}>
-            {entry.date}{' '}<em>{entry.description}</em>
-            {entry.diagnosisCodes !== undefined &&
-              <ul>
-                {entry.diagnosisCodes
-                  .map((code) => 
-                    <li key={`${entry.id}-${code}`}>
-                      {code}{' '}{diagnoses[code].name}
-                    </li>)}
-              </ul>
-            }
-          </div>
-        )}
+       .map(entry => {return <PatientEntry key={entry.id} entry={entry} />; })}
     </div>
   );
 };
