@@ -10,6 +10,10 @@ export enum Gender {
   Other = "other"
 }
 
+export enum EntryType {
+  OccupationalHealthcare = "OccupationalHealthcare"
+}
+
 export interface Patient {
   id: string;
   name: string;

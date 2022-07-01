@@ -4,17 +4,55 @@ import { Patient, Gender } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
-import { Typography } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 import { mdiGenderFemale, mdiGenderMale, mdiGenderTransgender } from "@mdi/js";
 import Icon from "@mdi/react";
 import { updatePatient } from '../state/reducer';
 import PatientEntry from './PatientEntry';
 import { assertNever } from '../helpers';
+import AddEntryModal from "../AddEntryModal";
+import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
 
 const PatientDetails = () => {
   const [{ patients }, dispatch] = useStateValue();
   const { id } = useParams<{id: string}>();
   const [patient, setPatient] = React.useState<Patient | undefined>(undefined);
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (newEntry: EntryFormValues) => {
+    if (newEntry.sickLeave 
+        && newEntry.sickLeave.startDate === ""
+        && newEntry.sickLeave.endDate === "") {
+      delete newEntry.sickLeave;
+    }
+    if (id) {
+      try {
+        const { data : updatedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        newEntry
+        );
+        dispatch(updatePatient(updatedPatient));
+        closeModal();
+      } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+          console.error(e?.response?.data || "Unrecognized axios error");
+          setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+        } else {
+          console.error("Unknown error", e);
+          setError("Unknown error");
+        }    
+      }
+    }
+  };
 
   const getGenderIcon = (gender: Gender): string => {
     switch(gender) {
@@ -77,6 +115,16 @@ const PatientDetails = () => {
       </Typography>
       ssh: {patient.ssn}<br />
       occupation: {patient.occupation}
+      <AddEntryModal 
+        modalOpen={modalOpen}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      /><br />
+      <Button variant="contained" onClick={() => openModal()}>
+        Add New Entry
+      </Button>
+
       <Typography
         variant="h6"
         style={{
