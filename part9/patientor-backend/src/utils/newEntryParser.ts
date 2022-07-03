@@ -126,7 +126,9 @@ const parseHospitalEntry = (
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
   if (!rating || !isHealthCheckRating(rating)) {
-    throw new Error(`Incorrect or missing health check rating ${rating}`);
+    if (typeof rating !== 'number') {
+      throw new Error(`Incorrect or missing health check rating ${rating}`);
+    }
   }
   return rating;
 };
