@@ -19,7 +19,9 @@ export interface EntryFormValues extends Omit<BaseEntry, 'id'> {
   startDate?: string,
   endDate?: string,
   employerName?: string,
-  healthCheckRating?: HealthCheckRating
+  healthCheckRating?: HealthCheckRating,
+  dischargeDate?: string,
+  dischargeCriteria?: string
 }
 
 interface Props {
@@ -30,6 +32,7 @@ interface Props {
 const typeOptions: TypeOption[] = [
   { value: EntryType.OccupationalHealthcareEntry, label: "Occupational healthcare" },
   { value: EntryType.HealthCheckEntry, label: "Health check" },
+  { value: EntryType.HospitalEntry, label: "Hospital"}
 ];
 
 const healthCheckRatingOptions: HealthCheckRatingOption[] = [
@@ -60,6 +63,17 @@ const InitialValuesForHealthCheckEntry = {
   healthCheckRating: HealthCheckRating.Healthy
 };
 
+const InitialValuesForHospitalEntry = {
+  description: "",
+  date: "",
+  specialist: "",
+  diagnosisCodes: [],
+  type: EntryType.HospitalEntry,
+  dischargeDate: "",
+  dischargeCriteria: ""
+};
+
+
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
   const [EntryInitialValues, setEntryInitialValues] = React.useState<EntryFormValues>(
@@ -73,6 +87,8 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         setEntryInitialValues(InitialValuesForOccupationalHealthcareEntry);
       } else if (formType === EntryType.HealthCheckEntry) {
         setEntryInitialValues(InitialValuesForHealthCheckEntry);
+      } else if (formType === EntryType.HospitalEntry) {
+        setEntryInitialValues(InitialValuesForHospitalEntry);
       }
     }
   };
@@ -96,11 +112,23 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         } else if (!helpers.isValidDate(values.date)) {
           errors.date = invalidError;
         }
-          if (!values.specialist) {
-            errors.specialist = requiredError;
-          } else if (!helpers.isValidText(values.specialist)) {
-            errors.specialist = invalidError;
+        if (!values.specialist) {
+          errors.specialist = requiredError;
+        } else if (!helpers.isValidText(values.specialist)) {
+          errors.specialist = invalidError;
+        }
+        if (values.type === EntryType.HospitalEntry) {
+          if (!values.dischargeCriteria) {
+            errors.dischargeCriteria = requiredError;
+          } else if (!helpers.isValidText(values.dischargeCriteria)) {
+            errors.dischargeCriteria = invalidError;
           }
+          if (!values.dischargeDate) {
+            errors.dischargeDate = requiredError;
+          } else if (!helpers.isValidDate(values.dischargeDate)) {
+            errors.dischargeDate = invalidError;
+          }
+        }
         if (values.type === EntryType.OccupationalHealthcareEntry) {
           if (!values.employerName) {
             errors.employerName = requiredError;
@@ -188,6 +216,22 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                   component={TextField}
                 />
               </div>
+            }
+            {values.dischargeDate !== undefined &&
+              <Field
+                label="Discharge date"
+                placeholder="YYYY-MM-DD"
+                name="dischargeDate"
+                component={TextField}
+              />
+            }
+            {values.dischargeCriteria !== undefined &&
+              <Field
+                label="Discharge criteria"
+                placeholder="Criteria for discharge"
+                name="dischargeCriteria"
+                component={TextField}
+              />
             }
             {values.healthCheckRating !== undefined &&
               <SelectField

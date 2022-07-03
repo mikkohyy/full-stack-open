@@ -4,7 +4,8 @@ import {
   Patient,
   Gender,
   NewOccupationalHealthCareEntry,
-  NewHealthCheckEntry
+  NewHealthCheckEntry,
+  NewHospitalEntry
 } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
@@ -64,6 +65,18 @@ const PatientDetails = () => {
           diagnosisCodes: newEntry.diagnosisCodes,
           healthCheckRating: newEntry.healthCheckRating
         } as NewHealthCheckEntry;
+      } else if (newEntry.type === 'Hospital') {
+        entryToBeAdded = {
+          description: newEntry.description,
+          date: newEntry.date,
+          specialist: newEntry.specialist,
+          type: newEntry.type,
+          diagnosisCodes: newEntry.diagnosisCodes,
+          discharge: {
+            date: newEntry.dischargeDate,
+            criteria: newEntry.dischargeCriteria
+          }
+        } as NewHospitalEntry;
       }
     }
 
