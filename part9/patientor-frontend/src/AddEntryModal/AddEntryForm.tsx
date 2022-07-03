@@ -154,7 +154,6 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
-        console.log(values);
         return (
           <Form className="form ui">
             <SelectFieldOnChange
