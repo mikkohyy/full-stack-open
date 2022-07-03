@@ -7,7 +7,7 @@ import {
   TextField as TextFieldMUI,
   Typography,
 } from "@material-ui/core";
-import { Diagnosis, Gender, EntryType } from "../types";
+import { Diagnosis, Gender, EntryType, HealthCheckRating } from "../types";
 import { InputLabel } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 
@@ -22,14 +22,32 @@ export type TypeOption = {
   label: string;
 };
 
+export type HealthCheckRatingOption  = {
+  value: HealthCheckRating,
+  label: string;
+};
+
 // props for select field component
 type SelectFieldProps = {
   name: string;
   label: string;
+  options: GenderOption[] | HealthCheckRatingOption[];
+};
+
+// props for select field component
+type SelectFieldPropsOnChange = {
+  name: string;
+  label: string;
   options: GenderOption[] | TypeOption[];
+  onChange: (value: PointerEvent) => void
 };
 
 const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
+
+const FormikSelectOnChange = ({ field, ...props }: FieldProps) => {
+  return <Select {...field} {...props} />;
+};
+
 
 export const SelectField = ({ name, label, options }: SelectFieldProps) => (
   <>
@@ -40,6 +58,26 @@ export const SelectField = ({ name, label, options }: SelectFieldProps) => (
       label={label}
       component={FormikSelect}
       name={name}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label || option.value}
+        </MenuItem>
+      ))}
+    </Field>
+  </>
+);
+
+export const SelectFieldOnChange = ({ name, label, options, onChange }: SelectFieldPropsOnChange) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <Field
+      fullWidth
+      style={{ marginBottom: "0.5em" }}
+      label={label}
+      component={FormikSelectOnChange}
+      name={name}
+      onChange={onChange}
     >
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>

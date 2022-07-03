@@ -1,6 +1,11 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Patient, Gender, NewOccupationalHealthCareEntry } from "../types";
+import { 
+  Patient,
+  Gender,
+  NewOccupationalHealthCareEntry,
+  NewHealthCheckEntry
+} from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
@@ -29,23 +34,37 @@ const PatientDetails = () => {
   };
 
   const submitNewEntry = async (newEntry: EntryFormValues) => {
-    let entryToBeAdded = {
-      description: newEntry.description,
-      date: newEntry.date,
-      specialist: newEntry.specialist,
-      employerName: newEntry.employerName,
-      type: newEntry.type,
-      diagnosisCodes: newEntry.diagnosisCodes
-    } as NewOccupationalHealthCareEntry;
+    let entryToBeAdded = {};
+    if (newEntry !== null) {
+      if (newEntry.type === 'OccupationalHealthcare') {
+        entryToBeAdded = {
+          description: newEntry.description,
+          date: newEntry.date,
+          specialist: newEntry.specialist,
+          employerName: newEntry.employerName,
+          type: newEntry.type,
+          diagnosisCodes: newEntry.diagnosisCodes
+        } as NewOccupationalHealthCareEntry;
 
-    if (newEntry.sickLeave) {
-      entryToBeAdded = {
-        ...entryToBeAdded,
-        sickLeave: {
-          startDate: newEntry.startDate,
-          endDate: newEntry.endDate
+        if (newEntry.sickLeave && newEntry.startDate !== undefined && newEntry.endDate !== undefined) {
+          entryToBeAdded = {
+            ...entryToBeAdded,
+            sickLeave: {
+              startDate: newEntry.startDate,
+              endDate: newEntry.endDate
+            }
+          };        
         }
-      };
+      } else if (newEntry.type === 'HealthCheck') {
+        entryToBeAdded = {
+          description: newEntry.description,
+          date: newEntry.date,
+          specialist: newEntry.specialist,
+          type: newEntry.type,
+          diagnosisCodes: newEntry.diagnosisCodes,
+          healthCheckRating: newEntry.healthCheckRating
+        } as NewHealthCheckEntry;
+      }
     }
 
     if (id) {

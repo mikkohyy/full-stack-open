@@ -12,6 +12,7 @@ export enum Gender {
 
 export enum EntryType {
   OccupationalHealthcareEntry = "OccupationalHealthcare",
+  HealthCheckEntry = "HealthCheck",
 }
 
 export interface Patient {
@@ -24,7 +25,7 @@ export interface Patient {
   entries?: Entry[];
 }
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -40,6 +41,7 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 export type NewOccupationalHealthCareEntry = Omit<OccupationalHealthcareEntry, "id">;
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare"
