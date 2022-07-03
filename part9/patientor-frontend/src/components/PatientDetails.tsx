@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Patient, Gender } from "../types";
+import { Patient, Gender, NewOccupationalHealthCareEntry } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useStateValue } from "../state";
@@ -29,16 +29,30 @@ const PatientDetails = () => {
   };
 
   const submitNewEntry = async (newEntry: EntryFormValues) => {
-    if (newEntry.sickLeave 
-        && newEntry.sickLeave.startDate === ""
-        && newEntry.sickLeave.endDate === "") {
-      delete newEntry.sickLeave;
+    let entryToBeAdded = {
+      description: newEntry.description,
+      date: newEntry.date,
+      specialist: newEntry.specialist,
+      employerName: newEntry.employerName,
+      type: newEntry.type,
+      diagnosisCodes: newEntry.diagnosisCodes
+    } as NewOccupationalHealthCareEntry;
+
+    if (newEntry.sickLeave) {
+      entryToBeAdded = {
+        ...entryToBeAdded,
+        sickLeave: {
+          startDate: newEntry.startDate,
+          endDate: newEntry.endDate
+        }
+      };
     }
+
     if (id) {
       try {
         const { data : updatedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
-        newEntry
+        entryToBeAdded
         );
         dispatch(updatePatient(updatedPatient));
         closeModal();

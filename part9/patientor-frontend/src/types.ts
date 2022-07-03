@@ -11,7 +11,7 @@ export enum Gender {
 }
 
 export enum EntryType {
-  OccupationalHealthcare = "OccupationalHealthcare"
+  OccupationalHealthcareEntry = "OccupationalHealthcare",
 }
 
 export interface Patient {
@@ -32,6 +32,14 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
   type: string;
 }
+
+export interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare"
+  employerName: string;
+  sickLeave?: { startDate: string, endDate: string }
+}
+
+export type NewOccupationalHealthCareEntry = Omit<OccupationalHealthcareEntry, "id">;
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare"

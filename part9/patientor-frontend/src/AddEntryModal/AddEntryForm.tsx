@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { OccupationalHealthcareEntry, EntryType } from '../types';
 
 import { Grid, Button, Checkbox, FormControlLabel } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 import { TextField, DiagnosisSelection, SelectField, TypeOption } from "../AddPatientModal/FormField";
 import { useStateValue } from "../state";
+import helpers from '../helpers';
 
-export type EntryFormValues = Omit<OccupationalHealthcareEntry, 'id'>;
+export interface EntryFormValues extends Omit<OccupationalHealthcareEntry, 'id' | 'sickLeave'> {
+  sickLeave: boolean,
+  startDate: string,
+  endDate: string
+}
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -14,12 +19,11 @@ interface Props {
 }
 
 const typeOptions: TypeOption[] = [
-  { value: EntryType.OccupationalHealthcare, label: "Occupational healthcare" },
+  { value: EntryType.OccupationalHealthcareEntry, label: "Occupational healthcare" },
 ];
 
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
-  const [hasSickLeave, setHasSickLeave] = useState(false);
 
   return (
     <Formik
@@ -30,34 +34,53 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         employerName: "",
         diagnosisCodes: [],
         type: "OccupationalHealthcare",
-        sickLeave: { startDate: "", endDate: ""}
+        sickLeave: false,
+        startDate: "",
+        endDate: ""
       }}
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
+        const invalidError = "Invalid format";
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
+        } else if (!helpers.isValidText(values.description)) {
+          errors.description = invalidError;
         }
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!helpers.isValidDate(values.date)) {
+          errors.date = invalidError;
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
+        } else if (!helpers.isValidText(values.specialist)) {
+          errors.specialist = invalidError;
         }
         if (!values.employerName) {
           errors.employerName = requiredError;
+        } else if (!helpers.isValidText(values.employerName)) {
+          errors.employerName = invalidError;
         }
-        if (!values.diagnosisCodes) {
-          errors.diagnosisCodes = requiredError;
-        }
-        if (!values.type) {
-          errors.diagnosisCodes = requiredError;
+        if (values.sickLeave) {
+          if (!values.startDate) {
+            errors.startDate = requiredError;
+          }
+          if (!values.endDate) {
+            errors.endDate = requiredError;
+          }
+          if (!helpers.isValidDate(values.startDate)) {
+            errors.startDate = invalidError;
+          }
+          if (!helpers.isValidDate(values.endDate)) {
+            errors.endDate = invalidError;
+          }
         }
         return errors;
       }}
     >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
         return (
           <Form className="form ui">
             <SelectField label="Type" name="type" options={typeOptions} />
@@ -86,29 +109,31 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               component={TextField}
             />
             <FormControlLabel
-              control= {
+              control={
                 <Checkbox
-                  onChange={() => setHasSickLeave(!hasSickLeave)}
+                  onChange={() => {
+                    values.sickLeave = !values.sickLeave;
+                    values.startDate = "";
+                    values.endDate = "";
+                  }}
                 />
               }
               label="Sick leave"
             />
-            { hasSickLeave && 
-              <div>
-                <Field 
-                  label="Sickleave starts"
-                  placeholder="YYYY-MM-DD"
-                  name="sickLeave.startDate"
-                  component={TextField}
-                />
-                <Field 
-                  label="Sickleave ends"
-                  placeholder="YYYY-MM-DD"
-                  name="sickLeave.endDate"
-                  component={TextField}
-                />
-              </div>
-            }
+            <div>
+              <Field
+                label="Sickleave starts"
+                placeholder="YYYY-MM-DD"
+                name="startDate"
+                component={TextField}
+              />
+              <Field
+                label="Sickleave ends"
+                placeholder="YYYY-MM-DD"
+                name="endDate"
+                component={TextField}
+              />
+            </div>
             <DiagnosisSelection
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
