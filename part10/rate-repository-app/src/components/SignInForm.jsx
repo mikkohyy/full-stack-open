@@ -47,6 +47,7 @@ const SignInForm = ({ onSubmit }) => {
           name="password"
           placeholder="Password"
           style={styles.loginFieldContentStyle}
+          secureTextEntry
         />
       </View>
       <Pressable style={styles.buttonStyle} onPress={onSubmit}>
