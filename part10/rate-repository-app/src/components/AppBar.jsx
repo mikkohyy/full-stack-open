@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer} horizontal={true}>
+      <ScrollView horizontal={true}>
         <AppBarTab tabText="Repositories" linkTo="/" />
         <AppBarTab tabText="Sign in" linkTo="/singin" />
       </ScrollView>
