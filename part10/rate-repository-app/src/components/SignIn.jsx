@@ -25,8 +25,8 @@ const SignIn = () => {
   const [signIn] = useSignIn();
   const onSubmit = async ({ username, password }) => {
     try {
-      const { data } = await signIn(username, password);
-      console.log(data.authenticate);
+      const { authenticate } = await signIn(username, password);
+      console.log(authenticate);
     } catch (error) {
       console.log(error);
     }
