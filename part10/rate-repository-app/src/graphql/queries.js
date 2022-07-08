@@ -13,3 +13,11 @@ export const GET_REPOSITORIES = gql`
   }
   ${CORE_REPOSITORY_FIELDS}
 `;
+
+export const SIGN_IN = gql`
+  mutation authenticate($username: String!, $password: String!) {
+    authenticate(credentials: { username: $username, password: $password }) {
+      accessToken
+    }
+  }
+`;
