@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import Text from "./Text";
+import Text from "../Text";
 import { Link } from "react-router-native";
 
-import theme from "../theme";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   tabText: {
