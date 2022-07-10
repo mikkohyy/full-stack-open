@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import ItemTopContainer from "./ItemTopContainer";
 import ItemBottomContainer from "./ItemBottomContainer";
 
-import theme from "../theme";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
 });
 const RepositoryItem = ({ item }) => {
   return (
-    <View style={styles.container}>
-      <ItemTopContainer item={item} />
+    <View testID="repositoryItem" style={styles.container}>
+      <ItemTopContainer testID="repositoryItem" item={item} />
       <ItemBottomContainer item={item} />
     </View>
   );
