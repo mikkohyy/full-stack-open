@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 const RepositoryItem = ({ item }) => {
   return (
     <View testID="repositoryItem" style={styles.container}>
-      <ItemTopContainer testID="repositoryItem" item={item} />
+      <ItemTopContainer item={item} />
       <ItemBottomContainer item={item} />
     </View>
   );
