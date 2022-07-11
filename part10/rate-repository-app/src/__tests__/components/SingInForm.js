@@ -11,7 +11,7 @@ describe("SignIn", () => {
       };
 
       const onSubmit = jest.fn();
-      const { getByPlaceholderText, getByText, debug } = render(
+      const { getByPlaceholderText, getByText } = render(
         <Formik initialValues={initialValues} onSubmit={onSubmit}>
           {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
         </Formik>
