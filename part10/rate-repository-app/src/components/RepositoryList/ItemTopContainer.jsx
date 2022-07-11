@@ -56,13 +56,17 @@ const ItemTopContainer = ({ item }) => {
       </View>
       <View style={styles.infoContainer}>
         <View>
-          <Text style={styles.nameText}>{item.fullName}</Text>
+          <Text testID="authorName" style={styles.nameText}>
+            {item.fullName}
+          </Text>
         </View>
-        <View style={styles.descriptionTextContainer}>
+        <View testID="description" style={styles.descriptionTextContainer}>
           <Text style={styles.descriptionText}>{item.description}</Text>
         </View>
         <View style={styles.languageItemContainer}>
-          <Text style={styles.languageItemText}>{item.language}</Text>
+          <Text testID="language" style={styles.languageItemText}>
+            {item.language}
+          </Text>
         </View>
       </View>
     </View>

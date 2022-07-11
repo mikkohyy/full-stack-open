@@ -12,10 +12,26 @@ const styles = StyleSheet.create({
 const ItemBottomContainer = ({ item }) => {
   return (
     <View style={styles.bottomContainer}>
-      <ItemVolumeTextView volume={item.stargazersCount} text="Stars" />
-      <ItemVolumeTextView volume={item.forksCount} text="Forks" />
-      <ItemVolumeTextView volume={item.reviewCount} text="Reviews" />
-      <ItemVolumeTextView volume={item.ratingAverage} text="Rating" />
+      <ItemVolumeTextView
+        testID="stargazersCount"
+        volume={item.stargazersCount}
+        text="Stars"
+      />
+      <ItemVolumeTextView
+        testID="forksCount"
+        volume={item.forksCount}
+        text="Forks"
+      />
+      <ItemVolumeTextView
+        testID="reviewCount"
+        volume={item.reviewCount}
+        text="Reviews"
+      />
+      <ItemVolumeTextView
+        testID="ratingAverage"
+        volume={item.ratingAverage}
+        text="Rating"
+      />
     </View>
   );
 };

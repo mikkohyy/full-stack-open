@@ -29,9 +29,9 @@ const getVolumeString = (volume) => {
   return volumeValue;
 };
 
-const ItemVolumeTextView = ({ text, volume }) => {
+const ItemVolumeTextView = ({ text, volume, testID }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={testID}>
       <Text style={styles.volume}>{getVolumeString(volume)}</Text>
       <Text style={styles.text}>{text}</Text>
     </View>

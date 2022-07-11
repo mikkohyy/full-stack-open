@@ -1,4 +1,3 @@
-import { within } from "@testing-library/dom";
 import { render } from "@testing-library/react-native";
 import RepositoryListContainer from "../../../components/RepositoryList/RepositoryListContainer";
 
@@ -48,16 +47,50 @@ describe("RepositoryList", () => {
         ],
       };
 
-      const { debug, getAllByTestId } = render(
+      const { getAllByTestId } = render(
         <RepositoryListContainer repositories={repositories} />
       );
 
-      const repositoryItems = getAllByTestId("repositoryItem");
-      const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;
+      const [firstRepositoryAuthor, secondRepositoryAuthor] =
+        getAllByTestId("authorName");
+      expect(firstRepositoryAuthor).toHaveTextContent("jaredpalmer/formik");
+      expect(secondRepositoryAuthor).toHaveTextContent(
+        "async-library/react-async"
+      );
 
-      expect(firstRepositoryItem).toHaveTextContent("jaredpalmer/formik");
+      const [firstRepositoryDescription, secondRepositoryDescription] =
+        getAllByTestId("description");
+      expect(firstRepositoryDescription).toHaveTextContent(
+        "Build forms in React, without the tears"
+      );
+      expect(secondRepositoryDescription).toHaveTextContent(
+        "Flexible promise-based React data loader"
+      );
 
-      expect(2).toBe(2);
+      const [firstRepositoryLanguage, secondRepositoryLanguage] =
+        getAllByTestId("language");
+      expect(firstRepositoryLanguage).toHaveTextContent("TypeScript");
+      expect(secondRepositoryLanguage).toHaveTextContent("JavaScript");
+
+      const [firstRepositoryGazerCount, secondRepositoryGazerCount] =
+        getAllByTestId("stargazersCount");
+      expect(firstRepositoryGazerCount).toHaveTextContent("21.9kStars");
+      expect(secondRepositoryGazerCount).toHaveTextContent("1.8kStars");
+
+      const [firstRepositoryForksCount, secondRepositoryForksCount] =
+        getAllByTestId("forksCount");
+      expect(firstRepositoryForksCount).toHaveTextContent("1.6kForks");
+      expect(secondRepositoryForksCount).toHaveTextContent("69Forks");
+
+      const [firstRepositoryReviewCount, secondRepositoryReviewCount] =
+        getAllByTestId("reviewCount");
+      expect(firstRepositoryReviewCount).toHaveTextContent("3Reviews");
+      expect(secondRepositoryReviewCount).toHaveTextContent("3Reviews");
+
+      const [firstRepositoryRatingAverage, secondRepositoryRatingAverage] =
+        getAllByTestId("ratingAverage");
+      expect(firstRepositoryRatingAverage).toHaveTextContent("88");
+      expect(secondRepositoryRatingAverage).toHaveTextContent("72");
     });
   });
 });
