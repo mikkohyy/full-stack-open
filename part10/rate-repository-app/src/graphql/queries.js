@@ -30,3 +30,13 @@ export const ME = gql`
     }
   }
 `;
+
+export const GET_REPOSITORY = gql`
+  query findRepositoryById($id: ID!) {
+    repository(id: $id) {
+      ...CoreRepositoryFields
+      url
+    }
+  }
+  ${CORE_REPOSITORY_FIELDS}
+`;
