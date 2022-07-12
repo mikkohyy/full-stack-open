@@ -18,6 +18,7 @@ const theme = {
     subheading: 16,
     tabItem: 20,
     form: 16,
+    score: 22,
   },
   fonts: {
     main: Platform.select({

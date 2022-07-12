@@ -1,14 +1,86 @@
 import { useQuery } from "@apollo/client";
 import { GET_REPOSITORY } from "../graphql/queries";
-import { View } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import { useParams } from "react-router-native";
 import RepositoryItem from "./RepositoryList/RepositoryItem";
+import format from "date-fns/format";
+import Text from "./Text";
 
+import theme from "../theme";
+
+const styles = StyleSheet.create({
+  separator: {
+    height: 10,
+  },
+  container: {
+    padding: 20,
+    backgroundColor: theme.colors.elementBackground,
+    flexDirection: "row",
+    flexGrow: 1,
+    flexShrink: 0,
+  },
+  nameText: {
+    fontWeight: theme.fontWeights.bold,
+  },
+  infoContainer: {
+    flexShrink: 1,
+    flexGrow: 1,
+  },
+  ratingContainer: {
+    borderColor: theme.colors.languageBackground,
+    borderWidth: 2,
+    alignSelf: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+    marginRight: 10,
+  },
+  ratingText: {
+    color: theme.colors.languageBackground,
+    fontSize: theme.fontSizes.score,
+  },
+});
+
+const ItemSeparator = () => <View style={styles.separator} />;
+
+const ReviewItem = ({ review }) => {
+  const creationDay = format(new Date(review.createdAt), "d.M.yyyy");
+  return (
+    <View style={styles.container}>
+      <View style={styles.ratingContainer}>
+        <Text style={styles.ratingText}>{review.rating}</Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.nameText}>{review.user.username}</Text>
+        <Text>{creationDay}</Text>
+        <Text>{review.text}</Text>
+      </View>
+    </View>
+  );
+};
+
+const ReviewList = ({ repository }) => {
+  const reviewNodes = repository.reviews
+    ? repository.reviews.edges.map((edge) => edge.node)
+    : [];
+
+  return (
+    <FlatList
+      data={reviewNodes}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ItemSeparatorComponent={ItemSeparator}
+    />
+  );
+};
 const SingleRepository = () => {
   const id = useParams().id;
 
   const { data, error, loading } = useQuery(GET_REPOSITORY, {
     variables: { id },
+    fetchPolicy: "cache-and-network",
   });
 
   if (error) {
@@ -22,6 +94,8 @@ const SingleRepository = () => {
   return (
     <View>
       <RepositoryItem item={data.repository} />
+      <ItemSeparator />
+      <ReviewList repository={data.repository} />
     </View>
   );
 };
