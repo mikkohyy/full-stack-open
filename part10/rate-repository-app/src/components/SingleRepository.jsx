@@ -41,6 +41,14 @@ const styles = StyleSheet.create({
     color: theme.colors.languageBackground,
     fontSize: theme.fontSizes.score,
   },
+  mainContainer: {
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  reviewsContainer: {
+    flexShrink: 1,
+    flexGrow: 0,
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
@@ -92,10 +100,12 @@ const SingleRepository = () => {
   }
 
   return (
-    <View>
+    <View style={styles.mainContainer}>
       <RepositoryItem item={data.repository} />
       <ItemSeparator />
-      <ReviewList repository={data.repository} />
+      <View style={styles.reviewsContainer}>
+        <ReviewList repository={data.repository} />
+      </View>
     </View>
   );
 };
