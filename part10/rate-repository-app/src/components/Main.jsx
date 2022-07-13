@@ -6,6 +6,7 @@ import AppBar from "./AppBar";
 import SignIn from "./SignIn";
 import SingleRepository from "./SingleRepository";
 import CreateReviewView from "./CreateReviewView";
+import SignUpView from "./SignUpView";
 
 import theme from "../theme";
 
@@ -23,7 +24,8 @@ const Main = () => {
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />
-        <Route path="/singin" element={<SignIn />} exact />
+        <Route path="/signin" element={<SignIn />} exact />
+        <Route path="/signup" element={<SignUpView />} exact />
         <Route path="/repositories/:id" element={<SingleRepository />} exact />
         <Route path="/create-review" element={<CreateReviewView />} exact />
         <Route path="*" element={<Navigate to="/" replace />} />
