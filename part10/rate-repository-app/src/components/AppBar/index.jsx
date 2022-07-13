@@ -30,6 +30,9 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal={true}>
         <LinkBarTab tabText="Repositories" linkTo="/" />
+        {data.me && (
+          <LinkBarTab tabText="Create a review" linkTo="/create-review" />
+        )}
         {!data.me && <LinkBarTab tabText="Sign in" linkTo="/singin" />}
         {data.me && <FunctionBarTab tabText="Sing out" onPress={signOut} />}
       </ScrollView>

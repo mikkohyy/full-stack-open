@@ -31,6 +31,13 @@ const theme = {
     normal: "400",
     bold: "700",
   },
+  formStyles: {
+    formStyle: {
+      paddingHorizontal: 10,
+      backgroundColor: "white",
+      paddingBottom: 10,
+    },
+  },
 };
 
 export default theme;

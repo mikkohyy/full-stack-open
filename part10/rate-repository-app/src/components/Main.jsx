@@ -5,6 +5,7 @@ import RepositoryList from "./RepositoryList";
 import AppBar from "./AppBar";
 import SignIn from "./SignIn";
 import SingleRepository from "./SingleRepository";
+import CreateReviewView from "./CreateReviewView";
 
 import theme from "../theme";
 
@@ -23,8 +24,9 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />
         <Route path="/singin" element={<SignIn />} exact />
-        <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/repositories/:id" element={<SingleRepository />} exact />
+        <Route path="/create-review" element={<CreateReviewView />} exact />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>
   );
