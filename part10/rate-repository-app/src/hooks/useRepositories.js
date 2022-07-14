@@ -15,10 +15,13 @@ const getOrderVariables = (order) => {
   return orderVariables;
 };
 
-const useRepositories = (order) => {
+const useRepositories = (order, searchText) => {
   const { data, error, loading } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
-    variables: getOrderVariables(order),
+    variables: {
+      ...getOrderVariables(order),
+      searchKeyword: searchText,
+    },
   });
 
   if (error) {
