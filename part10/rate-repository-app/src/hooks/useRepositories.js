@@ -1,9 +1,24 @@
 import { useQuery } from "@apollo/client";
 import { GET_REPOSITORIES } from "../graphql/queries";
 
-const useRepositories = () => {
+const getOrderVariables = (order) => {
+  let orderVariables = {};
+
+  if (order === "latest") {
+    orderVariables = { orderDirection: "DESC", orderBy: "CREATED_AT" };
+  } else if (order === "highestRated") {
+    orderVariables = { orderDirection: "DESC", orderBy: "RATING_AVERAGE" };
+  } else if (order === "lowestRated") {
+    orderVariables = { orderDirection: "ASC", orderBy: "RATING_AVERAGE" };
+  }
+
+  return orderVariables;
+};
+
+const useRepositories = (order) => {
   const { data, error, loading } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
+    variables: getOrderVariables(order),
   });
 
   if (error) {

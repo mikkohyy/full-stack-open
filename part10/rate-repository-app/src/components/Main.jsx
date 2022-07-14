@@ -16,20 +16,30 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     backgroundColor: theme.colors.basicBackground,
   },
+  viewContainer: {
+    flexGrow: 0,
+    flexShrink: 1,
+  },
 });
 
 const Main = () => {
   return (
     <View style={styles.container}>
       <AppBar />
-      <Routes>
-        <Route path="/" element={<RepositoryList />} exact />
-        <Route path="/signin" element={<SignIn />} exact />
-        <Route path="/signup" element={<SignUpView />} exact />
-        <Route path="/repositories/:id" element={<SingleRepository />} exact />
-        <Route path="/create-review" element={<CreateReviewView />} exact />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <View style={styles.viewContainer}>
+        <Routes>
+          <Route path="/" element={<RepositoryList />} exact />
+          <Route path="/signin" element={<SignIn />} exact />
+          <Route path="/signup" element={<SignUpView />} exact />
+          <Route
+            path="/repositories/:id"
+            element={<SingleRepository />}
+            exact
+          />
+          <Route path="/create-review" element={<CreateReviewView />} exact />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </View>
     </View>
   );
 };
