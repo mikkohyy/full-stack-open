@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const RepositoryList = () => {
   const [order, setOrder] = useState("latest");
+  const [searchText, setSearchText] = useState("");
   const { repositories } = useRepositories(order);
 
   return (
@@ -11,6 +12,8 @@ const RepositoryList = () => {
       repositories={repositories}
       order={order}
       setOrder={setOrder}
+      searchText={searchText}
+      setSearchText={setSearchText}
     />
   );
 };
