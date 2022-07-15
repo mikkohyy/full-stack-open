@@ -50,15 +50,21 @@ export const ME = gql`
 `;
 
 export const GET_REPOSITORY = gql`
-  query findRepositoryById($id: ID!) {
+  query findRepositoryById($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       ...CoreRepositoryFields
       url
-      reviews {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             ...Review
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }

@@ -69,10 +69,14 @@ const ReviewItem = ({ review }) => {
   );
 };
 
-const ReviewList = ({ repository }) => {
+const ReviewList = ({ repository, fetchMore }) => {
   const reviewNodes = repository.reviews
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <FlatList
@@ -80,20 +84,35 @@ const ReviewList = ({ repository }) => {
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
 const SingleRepository = () => {
   const id = useParams().id;
 
-  const { data, error, loading } = useQuery(GET_REPOSITORY, {
-    variables: { id },
+  const { data, error, loading, fetchMore } = useQuery(GET_REPOSITORY, {
+    variables: { id, first: 4 },
     fetchPolicy: "cache-and-network",
   });
 
   if (error) {
     console.log(error);
   }
+
+  const handleFetchMore = () => {
+    const canFetchMore =
+      !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: { id, after: data.repository.reviews.pageInfo.endCursor },
+    });
+  };
 
   if (loading) {
     return null;
@@ -104,7 +123,7 @@ const SingleRepository = () => {
       <RepositoryItem item={data.repository} />
       <ItemSeparator />
       <View style={styles.reviewsContainer}>
-        <ReviewList repository={data.repository} />
+        <ReviewList repository={data.repository} fetchMore={handleFetchMore} />
       </View>
     </View>
   );
