@@ -7,7 +7,15 @@ const RepositoryList = () => {
   const [order, setOrder] = useState("latest");
   const [searchText, setSearchText] = useState("");
   const [debouncedSearchText] = useDebounce(searchText, 500);
-  const { repositories } = useRepositories(order, debouncedSearchText);
+  const { repositories, fetchMore } = useRepositories(
+    4,
+    order,
+    debouncedSearchText
+  );
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -16,6 +24,7 @@ const RepositoryList = () => {
       setOrder={setOrder}
       searchText={searchText}
       setSearchText={setSearchText}
+      onEndReach={onEndReach}
     />
   );
 };

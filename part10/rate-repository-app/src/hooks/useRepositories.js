@@ -15,12 +15,13 @@ const getOrderVariables = (order) => {
   return orderVariables;
 };
 
-const useRepositories = (order, searchText) => {
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
+const useRepositories = (fetchN, order, searchText) => {
+  const { data, error, loading, fetchMore } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
     variables: {
       ...getOrderVariables(order),
       searchKeyword: searchText,
+      first: fetchN,
     },
   });
 
@@ -28,8 +29,25 @@ const useRepositories = (order, searchText) => {
     console.log(error);
   }
 
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...getOrderVariables(order),
+        searchKeyword: searchText,
+      },
+    });
+  };
+
   return {
     repositories: loading ? { edges: [] } : { ...data.repositories },
+    fetchMore: handleFetchMore,
     loading,
   };
   // Removed refetch: fetchRepositories since I think that when adding new repos, I will be

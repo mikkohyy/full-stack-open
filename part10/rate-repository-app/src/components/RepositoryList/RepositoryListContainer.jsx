@@ -122,6 +122,7 @@ class RepositoryListContainer extends React.Component {
   };
 
   render() {
+    const props = this.props;
     return (
       <FlatList
         data={this.getRepositoryNodes()}
@@ -130,6 +131,8 @@ class RepositoryListContainer extends React.Component {
         renderItem={({ item }) => <RepositoryItem item={item} />}
         ListHeaderComponent={this.renderHeader}
         stickyHeaderIndices={[0]}
+        onEndReached={props.onEndReach}
+        onEndReachedThreshold={0.5}
       />
     );
   }
