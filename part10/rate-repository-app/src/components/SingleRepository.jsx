@@ -89,6 +89,7 @@ const ReviewList = ({ repository, fetchMore }) => {
     />
   );
 };
+
 const SingleRepository = () => {
   const id = useParams().id;
 

@@ -7,6 +7,7 @@ import SignIn from "./SignIn";
 import SingleRepository from "./SingleRepository";
 import CreateReviewView from "./CreateReviewView";
 import SignUpView from "./SignUpView";
+import UsersReviewsView from "./UsersReviewsView";
 
 import theme from "../theme";
 
@@ -31,6 +32,7 @@ const Main = () => {
           <Route path="/" element={<RepositoryList />} exact />
           <Route path="/signin" element={<SignIn />} exact />
           <Route path="/signup" element={<SignUpView />} exact />
+          <Route path="/my-reviews" element={<UsersReviewsView />} exact />
           <Route
             path="/repositories/:id"
             element={<SingleRepository />}
