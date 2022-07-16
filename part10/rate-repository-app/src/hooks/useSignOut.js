@@ -2,7 +2,7 @@ import { useApolloClient } from "@apollo/client";
 import useAuthStorage from "./useAuthStorage";
 import { useNavigate } from "react-router-native";
 
-const useSignOut = () => {
+const useSignOut = (scrollViewRef) => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ const useSignOut = () => {
       await authStorage.removeAccessToken();
       await apolloClient.resetStore();
       navigate("/");
+      scrollViewRef.current.scrollTo({ x: 0, animated: true });
     } catch (error) {
       console.log(error);
     }

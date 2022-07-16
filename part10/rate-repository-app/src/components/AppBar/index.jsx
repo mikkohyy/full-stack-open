@@ -5,6 +5,7 @@ import FunctionBarTab from "./FunctionBarTab";
 import { GET_CURRENT_USER } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import useSignOut from "../../hooks/useSignOut";
+import { useRef } from "react";
 
 import theme from "../../theme";
 
@@ -21,7 +22,8 @@ const styles = StyleSheet.create({
 
 const AppBar = () => {
   const { data, loading } = useQuery(GET_CURRENT_USER);
-  const signOut = useSignOut();
+  const scrollViewRef = useRef();
+  const signOut = useSignOut(scrollViewRef);
 
   if (loading) {
     return null;
@@ -29,7 +31,7 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal={true}>
+      <ScrollView ref={scrollViewRef} horizontal={true}>
         <LinkBarTab tabText="Repositories" linkTo="/" />
         {data.me && (
           <LinkBarTab tabText="Create a review" linkTo="/create-review" />
