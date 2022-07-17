@@ -49,6 +49,7 @@ export const GET_CURRENT_USER = gql`
         edges {
           node {
             repository {
+              id
               fullName
             }
             ...Review

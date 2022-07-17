@@ -48,6 +48,7 @@ const SignUpForm = ({ onSubmit }) => {
           name="password"
           placeholder="Password"
           style={styles.fieldContentStyle}
+          secureTextEntry
         />
       </View>
       <View style={styles.formFieldStyle}>
@@ -55,6 +56,7 @@ const SignUpForm = ({ onSubmit }) => {
           name="passwordConfirmation"
           placeholder="Password confirmation "
           style={styles.fieldContentStyle}
+          secureTextEntry
         />
       </View>
       <Pressable style={styles.buttonStyle} onPress={onSubmit}>

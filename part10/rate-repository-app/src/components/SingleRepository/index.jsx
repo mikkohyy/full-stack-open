@@ -1,12 +1,12 @@
 import { useQuery } from "@apollo/client";
-import { GET_REPOSITORY } from "../graphql/queries";
+import { GET_REPOSITORY } from "../../graphql/queries";
 import { View, FlatList, StyleSheet } from "react-native";
 import { useParams } from "react-router-native";
-import RepositoryItem from "./RepositoryList/RepositoryItem";
+import RepositoryItem from "../RepositoryList/RepositoryItem";
 import format from "date-fns/format";
-import Text from "./Text";
+import Text from "../Text";
 
-import theme from "../theme";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   separator: {
