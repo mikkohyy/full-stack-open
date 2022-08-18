@@ -1,0 +1,3 @@
+docker start -i hardcore_mcclintock
+nano usr/src/app/index.js
+exit

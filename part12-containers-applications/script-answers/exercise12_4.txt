@@ -1,0 +1,8 @@
+root@820825c2f671:/# apt-get update
+root@820825c2f671:/# apt-get -y install curl
+[lots of installation text]
+root@820825c2f671:/# curl -sL https://deb.nodesource.com/setup_16.x | bash
+[installation text]
+apt install -y nodejs
+root@820825c2f671:/# node /usr/src/app/index.js 
+Hello World
