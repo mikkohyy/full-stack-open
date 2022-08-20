@@ -1,3 +1,5 @@
+backend_tests.rest
+
 # Logs
 logs
 *.log
