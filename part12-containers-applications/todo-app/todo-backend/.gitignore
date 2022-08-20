@@ -1,4 +1,5 @@
 backend_tests.rest
+mongo_data/
 
 # Logs
 logs
