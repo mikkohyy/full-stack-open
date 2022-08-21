@@ -18,6 +18,11 @@ router.post('/', async (req, res) => {
   })
 
   const currentTodoN = await getAsync('added_todos');
+
+  if (!currentTodoN) {
+    await setAsync('added_todos', "0");
+  }
+
   const newTodoN = Number(currentTodoN) + 1;
   await setAsync('added_todos', newTodoN);
 
