@@ -1,3 +1,5 @@
 .dockerignore
 node_modules
 Dockerfile
+mongo_data/
+redis_data/
