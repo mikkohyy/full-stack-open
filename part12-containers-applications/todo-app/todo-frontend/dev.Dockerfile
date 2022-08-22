@@ -6,4 +6,4 @@ COPY . .
 
 RUN npm install
 
-CMD ["npm", "start"]
+CMD ["REACT_APP_BACKEND_URL=http://localhost:3001/", "npm", "start"]
