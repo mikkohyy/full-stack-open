@@ -14,7 +14,7 @@ router.get('/', async (_, res) => {
 router.post('/', async (req, res) => {
   const todo = await Todo.create({
     text: req.body.text,
-    done: false
+    done: false,
   })
 
   const currentTodoN = await getAsync('added_todos');
