@@ -1,10 +1,13 @@
 const { Blog } = require('../models')
+const { SECRET } = require('./config')
+const jwt = require('jsonwebtoken')
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message)
-
   if (error.name === 'SequelizeValidationError') {
-    return res.status(400).send({ error: 'a field is missing'})
+    if (error.errors[0].validatorName === 'isEmail') {
+      return res.status(400).send({ error: error.errors[0].message })
+    }
+    return res.status(400).send({ error: 'validation error'})
   }
 
   if (error.name === 'TypeError') {
@@ -23,7 +26,22 @@ const blogFinder = async (req, res, next) => {
   next()
 }
 
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    try {
+      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+    } catch {
+      res.status(401).json({ error: 'token invalid' })
+    }
+  } else {
+    res.status(401).json({ error: 'token missing' })
+  }
+  next()
+}
+
 module.exports = {
   errorHandler,
-  blogFinder
+  blogFinder,
+  tokenExtractor
 }
