@@ -4,7 +4,7 @@ const { blogFinder } = require('../util/middleware')
 const { Blog } = require('../models')
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll()
   return res.json(blogs)
 });
 
