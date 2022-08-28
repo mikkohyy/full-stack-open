@@ -20,11 +20,13 @@ router.post('/', tokenExtractor, async (req, res, next) => {
   }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  if (req.blog) {
+router.delete('/:id', tokenExtractor, blogFinder, async (req, res) => {
+  if (req.blog && req.decodedToken.id === req.blog.userId) {
     await req.blog.destroy()
+    res.status(204).end()
+  } else {
+    res.status(401).end()
   }
-  res.status(204).end();
 })
 
 router.put('/:id', blogFinder, async (req, res, next) => {
