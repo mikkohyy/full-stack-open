@@ -28,7 +28,11 @@ router.get('/:id', async (req, res) => {
       }
     }]
   })
-  res.json(foundUser);
+  if (foundUser) {
+    res.json(foundUser)
+  } else {
+    res.status(404).end()
+  }
 })
 
 router.post('/', async (req, res, next) => {

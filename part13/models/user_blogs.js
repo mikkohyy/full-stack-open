@@ -20,9 +20,8 @@ UserBlogs.init({
     references: { model: 'blogs', key: 'id' }
   },
   read: {
-    type: DataTypes.STRING,
-    defaultValue: 'unread',
-    isIn: [['unread', 'read']]
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   sequelize,
