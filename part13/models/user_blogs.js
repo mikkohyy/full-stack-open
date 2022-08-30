@@ -12,12 +12,12 @@ UserBlogs.init({
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: { model: 'user', key: 'id' }
+    references: { model: 'users', key: 'id' }
   },
   blogId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: { model: 'blog', key: 'id' }
+    references: { model: 'blogs', key: 'id' }
   },
   read: {
     type: DataTypes.STRING,
@@ -28,7 +28,7 @@ UserBlogs.init({
   sequelize,
   underscored: true,
   timestamps: false,
-  modelName: 'user_blogs'
+  modelName: 'userBlogs'
 })
 
 module.exports = UserBlogs

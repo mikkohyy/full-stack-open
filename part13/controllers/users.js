@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { User } = require('../models')
 const { Blog } = require('../models')
+const { UserBlogs } = require('../models')
 const { hashPassword } = require('../util/utils')
 
 router.get('/', async (req, res) => {
@@ -12,6 +13,21 @@ router.get('/', async (req, res) => {
     }
   })
   return res.json(users)
+})
+
+router.get('/:id', async (req, res) => {
+  const foundUser = await User.findByPk(req.params.id, {
+    attributes: ['name', 'username'],
+    include: [{
+      model: Blog,
+      as: 'readings',
+      attributes: ['id', 'url', 'title', 'author', 'likes', 'year'],
+      through: {
+        attributes: []
+      }
+    }]
+  })
+  res.json(foundUser);
 })
 
 router.post('/', async (req, res, next) => {
