@@ -3,3 +3,4 @@ node_modules/
 .env
 api_tests.rest
 sql_commands.txt
+checklist.txt

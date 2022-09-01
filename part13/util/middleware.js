@@ -1,6 +1,7 @@
-const { Blog } = require('../models')
+const { Blog, Session, User } = require('../models')
 const { SECRET } = require('./config')
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 const errorHandler = (error, req, res, next) => {
   if (error.name === 'SequelizeValidationError') {
@@ -29,17 +30,55 @@ const tokenExtractor = (req, res, next) => {
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+      next()
     } catch {
       res.status(401).json({ error: 'token invalid' })
     }
   } else {
     res.status(401).json({ error: 'token missing' })
   }
+}
+
+const tokenGetter = (req, res, next) => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.fullToken = authorization.substring(7)
+  } else {
+    req.fullToken = null
+  }
+
   next()
+}
+
+const sessionChecker = async (req, res, next) => {
+  const userId = req.decodedToken.id
+  const token = req.fullToken
+
+  const sessionInfo = await Session.findOne({
+    attributes: ['user_id', 'token'],
+    include: {
+      model: User,
+      attributes: ['disabled']
+    },
+    where: {
+      [Op.and]: [
+        { user_id: userId },
+        { token: token }
+      ]
+    }
+  })
+
+  if (sessionInfo && !sessionInfo.user.disabled) {
+    next()
+  } else {
+    res.status(401).end()
+  }
 }
 
 module.exports = {
   errorHandler,
   blogFinder,
-  tokenExtractor
+  tokenExtractor,
+  tokenGetter,
+  sessionChecker
 }

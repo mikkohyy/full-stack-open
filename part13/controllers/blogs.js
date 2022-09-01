@@ -1,9 +1,12 @@
 const router = require('express').Router()
-const { blogFinder, tokenExtractor } = require('../util/middleware')
+const { 
+  blogFinder,
+  tokenExtractor,
+  tokenGetter,
+  sessionChecker } = require('../util/middleware')
 const { Op } = require('sequelize')
 
-const { Blog } = require('../models')
-const { User } = require('../models')
+const { Blog, User, UserBlogs } = require('../models')
 
 router.get('/', async (req, res) => {
   let where = {}
@@ -40,7 +43,7 @@ router.get('/', async (req, res) => {
   return res.json(blogs)
 });
 
-router.post('/', tokenExtractor, async (req, res, next) => {
+router.post('/', tokenExtractor, tokenGetter, sessionChecker, async (req, res, next) => {
   const newBlog = req.body;
   try {
     const userWhoAdded = await User.findByPk(req.decodedToken.id)
@@ -51,12 +54,21 @@ router.post('/', tokenExtractor, async (req, res, next) => {
   }
 })
 
-router.delete('/:id', tokenExtractor, blogFinder, async (req, res) => {
+router.delete(
+  '/:id',
+  tokenExtractor,
+  tokenGetter,
+  blogFinder,
+  sessionChecker,
+  async (req, res) => {
   if (req.blog && req.decodedToken.id === req.blog.userId) {
+    UserBlogs.destroy({
+      where: { blog_id: req.blog.id}
+    })
     await req.blog.destroy()
-    res.status(204).end()
+    res.status(200).end()
   } else {
-    res.status(401).end()
+    res.status(403).end()
   }
 })
 
